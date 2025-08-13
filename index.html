@@ -282,7 +282,173 @@ public class Demo {
               </div>
             </div>
           </div><!-- /String -->
+<!-- StringBuilder -->
+<div class="col-12" id="class-stringbuilder">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <h3 class="card-title">
+        <span class="badge text-bg-primary badge-pkg">java.lang.StringBuilder</span>
+      </h3>
+      <p class="text-secondary">Mutable sequence of characters; efficient concatenation and in-place edits.</p>
 
+      <div class="accordion" id="acc-stringbuilder">
+
+        <!-- append(...) -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="sb-append-h">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sb-append">append(…)</button>
+          </h2>
+          <div id="sb-append" class="accordion-collapse collapse show" data-bs-parent="#acc-stringbuilder">
+            <div class="accordion-body">
+              <p class="mb-2"><span class="sig">StringBuilder append(<em>overloads</em>)</span></p>
+              <ul class="small mb-3">
+                <li><strong>Purpose:</strong> Append representations of arguments (primitives, char[], String, Object, etc.).</li>
+                <li><strong>Parameters:</strong> value to append; many overloads.</li>
+                <li><strong>Returns:</strong> <code>this</code> (for chaining).</li>
+                <li><strong>Throws:</strong> —</li>
+                <li><strong>Javadoc (summary):</strong> Appends the string representation of the argument to this sequence.</li>
+              </ul>
+<pre><code id="code-sb-append" class="language-java">public class Demo {
+  public static void main(String[] args) {
+    StringBuilder sb = new StringBuilder("Hello");
+    sb.append(", ").append("Java ").append(21);
+    System.out.println(sb.toString());
+  }
+}</code></pre>
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-append">Copy Code</button>
+              </div>
+              <div class="console" id="out-sb-append">Hello, Java 21</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- insert(int, …) -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="sb-insert-h">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sb-insert">insert(int offset, …)</button>
+          </h2>
+          <div id="sb-insert" class="accordion-collapse collapse" data-bs-parent="#acc-stringbuilder">
+            <div class="accordion-body">
+              <p class="mb-2"><span class="sig">StringBuilder insert(int offset, <em>overloads</em>)</span></p>
+              <ul class="small mb-3">
+                <li><strong>Purpose:</strong> Insert text at a given index.</li>
+                <li><strong>Parameters:</strong> <code>offset</code> (0..length); value to insert.</li>
+                <li><strong>Returns:</strong> <code>this</code>.</li>
+                <li><strong>Throws:</strong> <code>StringIndexOutOfBoundsException</code> if offset invalid.</li>
+                <li><strong>Javadoc (summary):</strong> Inserts the string representation of the argument into this sequence.</li>
+              </ul>
+<pre><code id="code-sb-insert" class="language-java">public class Demo {
+  public static void main(String[] args) {
+    StringBuilder sb = new StringBuilder("Helo, Java");
+    sb.insert(2, "l"); // fix "Hello"
+    sb.insert(5, " dear"); 
+    System.out.println(sb.toString());
+  }
+}</code></pre>
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-insert">Copy Code</button>
+              </div>
+              <div class="console" id="out-sb-insert">Hello dear, Java</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- delete(int, int) / deleteCharAt(int) -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="sb-delete-h">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sb-delete">delete(int start, int end) / deleteCharAt(int index)</button>
+          </h2>
+          <div id="sb-delete" class="accordion-collapse collapse" data-bs-parent="#acc-stringbuilder">
+            <div class="accordion-body">
+              <p class="mb-2"><span class="sig">StringBuilder delete(int start, int end) • StringBuilder deleteCharAt(int index)</span></p>
+              <ul class="small mb-3">
+                <li><strong>Purpose:</strong> Remove a range or a single char.</li>
+                <li><strong>Parameters:</strong> start (inclusive), end (exclusive) / index.</li>
+                <li><strong>Returns:</strong> <code>this</code>.</li>
+                <li><strong>Throws:</strong> <code>StringIndexOutOfBoundsException</code> for invalid indices.</li>
+                <li><strong>Javadoc (summary):</strong> Deletes characters in the specified range or at index.</li>
+              </ul>
+<pre><code id="code-sb-delete" class="language-java">public class Demo {
+  public static void main(String[] args) {
+    StringBuilder sb = new StringBuilder("Hello, ***Java***!");
+    sb.delete(7, 10);        // remove first "***"
+    sb.deleteCharAt(sb.length()-2); // remove last '*'
+    System.out.println(sb.toString());
+  }
+}</code></pre>
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-delete">Copy Code</button>
+              </div>
+              <div class="console" id="out-sb-delete">Hello, Java**!</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- replace(int, int, String) -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="sb-replace-h">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sb-replace">replace(int start, int end, String str)</button>
+          </h2>
+          <div id="sb-replace" class="accordion-collapse collapse" data-bs-parent="#acc-stringbuilder">
+            <div class="accordion-body">
+              <p class="mb-2"><span class="sig">StringBuilder replace(int start, int end, String str)</span></p>
+              <ul class="small mb-3">
+                <li><strong>Purpose:</strong> Replace a substring by range.</li>
+                <li><strong>Parameters:</strong> start (inclusive), end (exclusive), replacement.</li>
+                <li><strong>Returns:</strong> <code>this</code>.</li>
+                <li><strong>Throws:</strong> <code>StringIndexOutOfBoundsException</code> if range invalid.</li>
+                <li><strong>Javadoc (summary):</strong> Replaces characters in the specified subsequence.</li>
+              </ul>
+<pre><code id="code-sb-replace" class="language-java">public class Demo {
+  public static void main(String[] args) {
+    StringBuilder sb = new StringBuilder("Order #INV-2024");
+    sb.replace(9, 13, "2025");
+    System.out.println(sb.toString());
+  }
+}</code></pre>
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-replace">Copy Code</button>
+              </div>
+              <div class="console" id="out-sb-replace">Order #INV-2025</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- reverse() -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="sb-reverse-h">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sb-reverse">reverse()</button>
+          </h2>
+          <div id="sb-reverse" class="accordion-collapse collapse" data-bs-parent="#acc-stringbuilder">
+            <div class="accordion-body">
+              <p class="mb-2"><span class="sig">StringBuilder reverse()</span></p>
+              <ul class="small mb-3">
+                <li><strong>Purpose:</strong> Reverse the character sequence in place.</li>
+                <li><strong>Parameters:</strong> —</li>
+                <li><strong>Returns:</strong> <code>this</code>.</li>
+                <li><strong>Throws:</strong> —</li>
+                <li><strong>Javadoc (summary):</strong> Causes this character sequence to be replaced by its reverse.</li>
+              </ul>
+<pre><code id="code-sb-reverse" class="language-java">public class Demo {
+  public static void main(String[] args) {
+    StringBuilder sb = new StringBuilder("LEVEL");
+    sb.reverse();
+    System.out.println(sb.toString());
+  }
+}</code></pre>
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-reverse">Copy Code</button>
+              </div>
+              <div class="console" id="out-sb-reverse">LEVEL</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /accordion -->
+    </div>
+  </div>
+</div> <!-- StringBuilder -->
         </div>
       </div>
       <!-- ============================= /java.lang ============================= -->
