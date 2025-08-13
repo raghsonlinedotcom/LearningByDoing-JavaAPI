@@ -1,413 +1,408 @@
 # Java API — Learning by Doing
 
-A hands-on, Bootstrap-powered “learn by doing” reference for popular **Core Java** APIs.  
-Browse by **package → class → method**. Each method entry includes:
-
-- **Signature**
-- **Purpose / Parameters / Returns / Throws**
-- **Javadoc-style summary** (concise, paraphrased)
-- **Runnable-style demo snippet**
-- **Expected console output**
-- One‑click **Copy Code/Output** with Toast feedback
+A hands‑on reference for popular **Core Java** APIs. Browse by **package → class → method**.  
+Each method entry includes **Signature • Purpose • Parameters • Returns • Throws • Javadoc‑style summary • Demo • Console output**.  
+UI is Bootstrap‑based; code is highlighted via **self‑hosted Highlight.js**. Includes a **search box** to jump to any method in the active tab.
 
 ---
 
-## 🎯 Objectives
+## Table of Contents
 
-- Learn core Java APIs with minimal context switching.
-- Keep examples runnable and small.
-- Standardize method documentation so you can expand effortlessly.
+- [Objectives](#objectives)
+- [What You Get](#what-you-get)
+- [Project Structure](#project-structure)
+- [Quick Start](#quick-start)
+  - [Open directly](#open-directly)
+  - [Docker (Nginx)](#docker-nginx)
+  - [Docker Compose](#docker-compose)
+- [Using the UI](#using-the-ui)
+  - [Tabs & Cards](#tabs--cards)
+  - [Method Entries](#method-entries)
+  - [Search Box](#search-box)
+- [Included API Coverage](#included-api-coverage)
+  - [java.lang](#javalang)
+  - [java.util](#javautil)
+  - [java.time](#javatime)
+  - [java.util.stream](#javautilstream)
+  - [java.util.regex](#javautilregex)
+- [Extending the Content](#extending-the-content)
+- [Self‑hosting Highlight.js](#selfhosting-highlightjs)
+- [Diagrams (PlantUML)](#diagrams-plantuml)
+- [FAQ](#faq)
+- [License](#license)
+- [Appendix: scripts/setup-highlightjs.sh](#appendix-scriptsssetup-highlightjssh)
 
 ---
 
-## 🗂️ Project Structure
+## Objectives
+
+- Learn widely‑used Java APIs with **minimal context switching**.
+- Keep examples **small, runnable, and consistent**.
+- Be easy to **extend** (copy an existing class card and edit).
+
+---
+
+## What You Get
+
+- **index.html** — A polished Bootstrap page with:
+  - Navbar, Off‑canvas menu, Hero, Carousel
+  - Tabs by package (`java.lang`, `java.util`, `java.time`, `java.util.stream`, `java.util.regex`)
+  - For each class: **Cards → Accordions → Method entries**
+  - **Copy Code / Copy Output** buttons with toasts
+  - **Search box** to filter methods in the current tab
+- **Dockerized static server** (Nginx) for `http://localhost:9999`
+- **This README** with PlantUML diagrams and instructions
+- **A setup script** to fetch Highlight.js assets locally
+
+---
+
+## Project Structure
 
 ```
-├─ index.html                 # The interactive tutorial UI
-├─ README.md                  # You are here
-├─ docker/
-│  ├─ Dockerfile              # Nginx static image
-│  ├─ default.conf            # Nginx server config
-│  └─ .dockerignore
-└─ docker-compose.yml         # Optional: easy local run
-```
-
-```
-project-root/
-├─ index.html
-├─ assets/
-│  └─ highlightjs/
-│      ├─ highlight.min.js
-│      ├─ styles/
-│      │   ├─ github-dark.min.css
-│      │   └─ github.min.css
-└─ scripts/
+.  
+├─ index.html  
+├─ README.md  
+├─ docker/  
+│  ├─ Dockerfile  
+│  ├─ default.conf  
+│  └─ .dockerignore  
+├─ docker-compose.yml  
+├─ assets/  
+│  └─ highlightjs/  
+│     ├─ highlight.min.js  
+│     └─ styles/  
+│        ├─ github-dark.min.css  
+│        └─ github.min.css  
+└─ scripts/  
    └─ setup-highlightjs.sh
 ```
+
+Tip: If you don’t have the `assets/highlightjs` folder yet, run the setup script in the appendix.
+
 ---
 
-## 🚀 Running Locally
+## Quick Start
 
-### Option A: Open `index.html` directly
-Just double‑click `index.html` (works offline via CDN).  
-Tip: if network-restricted, swap CDN links to local assets.
+### Open directly
+Open `index.html` in your browser. (For reliable CSS reloads, prefer Docker or any local static server.)
 
-### Option B: Docker (single command)
-```bash
-docker build -t java-api-lbd ./docker
-docker run --rm -p 9999:80 -v "$PWD":/usr/share/nginx/html:ro java-api-lbd
-# Open http://localhost:9999
-```
+### Docker (Nginx)
+1) Build the image: `docker build -t java-api-lbd ./docker`  
+2) Run (mount project root read‑only): `docker run --rm -p 9999:80 -v "$PWD":/usr/share/nginx/html:ro java-api-lbd`  
+3) Open: `http://localhost:9999`
 
-### Option C: Docker Compose
+### Docker Compose
+1) Start: `docker compose up --build`  
+2) Open: `http://localhost:9999`
 
-```bash
-docker compose up --build
-# Open http://localhost:9999
-```
+---
 
-### 🧱 UI Layout (ASCII)
+## Using the UI
 
-```
-+-------------------------------------------------------------+
-| Navbar + Offcanvas Package Index                            |
-+-----------------------+-------------------------------------+
-| Hero (Jumbotron)      | Carousel                            |
-+-----------------------+-------------------------------------+
-| Tabs: [java.lang] [java.util] [java.time] [java.util.stream]|
-+-------------------------------------------------------------+
-| Card(Class) → Accordion(Methods)                            |
-|   • Signature / Purpose / Params / Returns / Throws         |
-|   • Javadoc summary                                         |
-|   • Code snippet + Copy buttons                             |
-|   • Console output + Copy                                   |
-+-------------------------------------------------------------+
-```
+### Tabs & Cards
+- Tabs represent **packages** (e.g., `java.util`).
+- Inside each tab, each **card** represents a **class/interface** (e.g., `HashSet`).
+- Expand the accordion items to see **methods**.
 
-## 🌱 How to Extend (Add Classes/Methods)
-	1.	Pick the package tab (e.g., #java-lang).
-	2.	Within the tab’s grid, add a Card for the new class:
-	•	Give it an id like class-stringbuilder.
-	3.	Inside the card, add an Accordion with one accordion-item per method.
-	4.	For each method, include:
-	•	Signature line (.sig)
-	•	Bullet list: Purpose / Parameters / Returns / Throws / Javadoc summary
-	•	A demo <pre><code class="language-java" id="code-..."> ... </code></pre>
-	•	A console <div class="console" id="out-..."> ... </div>
-	•	Copy buttons with data-copy-target="code-..." and data-copy-target="out-..."
+### Method Entries
+Each method shows:
+- **Signature** (monospace line)
+- **Purpose / Parameters / Returns / Throws** (bulleted)
+- **Javadoc‑style summary** (concise, paraphrased)
+- **Code snippet** (copyable)
+- **Expected console output** (copyable)
 
-Reuse any existing class block as a template to keep consistency.
+### Search Box
+- Large **Search** input near the top of the page.
+- Filters **methods within the active tab** only (keeps context clean).
+- Matches are **highlighted**; non‑matches are hidden (methods and whole cards if no method matches).
+- Press **Esc** or click the ✕ button to clear.
 
-⸻
+---
 
-## 🧪 Example Class You Can Paste (StringBuilder)
+## Included API Coverage
 
-See “Appendix: StringBuilder block” below for a complete, paste‑ready class card (5 methods).
+### `java.lang`  {#javalang}
 
-⸻
+#### String (immutable UTF‑16 sequence)
+1) `length()` — Purpose: count chars. Parameters: — Returns: `int`. Throws: —  
+   Example: `"Hello, Java!"` → prints `13`  
+2) `substring(int beginIndex, int endIndex)` — Purpose: slice text. Params: begin inclusive, end exclusive. Returns: `String`. Throws: `IndexOutOfBoundsException`.  
+   Example: `"Transaction#INV-2025".substring(0,12)` → `Transaction`  
+3) `contains(CharSequence s)` — Purpose: membership test. Returns: `boolean`.  
+   Example: `"alpha,beta,gamma".contains("beta")` → `true`  
+4) `replace(CharSequence target, CharSequence replacement)` — Purpose: replace all occurrences. Returns: `String`.  
+   Example: `"alpha,beta,gamma".replace("beta","B")` → `alpha,B,gamma`  
+5) `split(String regex)` — Purpose: tokenize by regex. Returns: `String[]`. Throws: `PatternSyntaxException`.  
+   Example: `"a,b,c".split(",")` → `[a, b, c]`
 
-## 🧩 PlantUML Diagrams
+#### StringBuilder (mutable sequence)
+1) `append(...)` — Purpose: append values; many overloads. Returns: `this`.  
+   Output: `Hello, Java 21`  
+2) `insert(int offset, ...)` — Purpose: insert at index. Throws: `StringIndexOutOfBoundsException`.  
+   Output: `Hello dear, Java`  
+3) `delete(int start, int end)` / `deleteCharAt(int index)` — Purpose: remove range or single char.  
+   Output: `Hello, Java**!`  
+4) `replace(int start, int end, String str)` — Purpose: replace by range.  
+   Output: `Order #INV-2025`  
+5) `reverse()` — Purpose: reverse sequence in place.  
+   Output: `LEVEL`
 
-Save as docs/diagrams.puml if you want to render, or paste into https://www.plantuml.com/plantuml/
+---
 
-### Component View
+### `java.util`  {#javautil}
 
-```uml
-@startuml
-skinparam shadowing false
-skinparam componentStyle rectangle
+#### List (ArrayList)
+1) `add(E e)` — Append element. Returns: `boolean` (usually `true`). Throws: `UnsupportedOperationException` for fixed‑size lists.  
+   Output: `[Apple, Orange]`  
+2) `get(int index)` — Access by position. Throws: `IndexOutOfBoundsException`.  
+   Output: `B`  
+3) `set(int index, E element)` — Replace at index; returns old value.  
+   Output: `B -> [A, X, C]`  
+4) `remove(int index)` / `remove(Object o)` — Delete by index or first match.  
+   Output: `[A, B]`  
+5) `sort(Comparator<? super E> c)` — In‑place sort. Throws: `ClassCastException` for incompatible natural order.  
+   Output: `[apple, kiwi, mango]`
 
-package "Browser" {
-  [index.html] as UI
-  [Bootstrap] as BS
-  [Highlight.js] as HL
-}
+#### Map (HashMap)
+1) `put(K key, V value)` — Insert/replace mapping. Returns previous value or `null`.  
+   Output: `null`, then `2`, then `{apple=3}`  
+2) `getOrDefault(Object key, V defaultValue)` — Lookup with fallback.  
+   Output: `99`  
+3) `containsKey(Object key)` — Key existence.  
+   Output: `true`  
+4) `computeIfAbsent(K key, Function<? super K,? extends V> f)` — Lazily create value.  
+   Output: `{apple=2}`  
+5) `merge(K key, V value, BiFunction<? super V,? super V,? extends V> f)` — Combine values.  
+   Output: `4`
 
-node "Nginx (Docker)" as N {
-  [Static Server]
-}
+#### HashSet (no duplicates; average O(1))
+1) `add(E e)` — Returns `true` if set changed.  
+   Output: `true`, `false`, `[A]`  
+2) `contains(Object o)` — Membership test.  
+   Output: `true`, `false`  
+3) `remove(Object o)` — Remove if present.  
+   Output: `true`, `false`, `[A, C]`  
+4) `size()` — Count elements.  
+   Output: `2`  
+5) `isEmpty()` — Quick emptiness test.  
+   Output: `true`, then `false`
 
-UI -down-> BS
-UI -down-> HL
-UI --> N : GET / (index.html, assets)
-N --> UI : 200 OK (HTML/CSS/JS)
+#### ArrayDeque (fast queue/deque/stack)
+1) `addFirst(E e)` / `addLast(E e)` — Insert head/tail (may throw on capacity).  
+   Output: `[A, B, C]`  
+2) `offerFirst(E e)` / `offerLast(E e)` — Insert head/tail (non‑throwing).  
+   Output: `true`, `true`, `[1, 2]`  
+3) `pollFirst()` / `pollLast()` — Remove head/tail; returns `null` if empty.  
+   Output: `A`, `C`, `[B]`  
+4) `peekFirst()` / `peekLast()` — View head/tail; `null` if empty.  
+   Output: `A`, `B`, `[A, B]`  
+5) `push(E e)` / `pop()` — Stack‑style ops on front. Throws `NoSuchElementException` if empty.  
+   Output: `30`, `[20, 10]`
 
+---
+
+### `java.time`  {#javatime}
+
+#### LocalDate (date without time‑zone)
+1) `now()` — Current date.  
+   Output: `<today>`  
+2) `of(int y, int m, int d)` — Specific date. Throws `DateTimeException` if invalid.  
+   Output: `2025-10-20`  
+3) `plusDays(long days)` — Add/subtract days.  
+   Output: `2025-10-25`  
+4) `format(DateTimeFormatter f)` — Format to text.  
+   Output: `<today in dd-MMM-yyyy>`  
+5) `parse(CharSequence text)` — Parse ISO‑8601. Throws `DateTimeParseException`.  
+   Output: `2025-10-20`
+
+#### Instant / ZoneId / ZonedDateTime
+1) `Instant.now()` — Current UTC instant.  
+   Output: `<current UTC instant>`  
+2) `Instant.parse(CharSequence text)` — Parse ISO‑8601.  
+   Output: `2025-08-13T00:01:30Z` (after `plusSeconds(90)`)  
+3) `ofEpochMilli(long)` / `toEpochMilli()` — Convert to/from epoch millis.  
+   Output: `true` (round trip)  
+4) `ZoneId.of(String id)` — Get zone by ID.  
+   Output: `Asia/Kolkata`  
+5) `Instant.atZone(ZoneId)` — View instant in zone as `ZonedDateTime`.  
+   Output: `2025-08-13T12:00+05:30[Asia/Kolkata]`
+
+---
+
+### `java.util.stream`  {#javautilstream}
+
+#### Stream (functional pipelines)
+1) `filter(Predicate)` — Keep matching elements.  
+   Output: `[zebra, apple, mango]` (length ≥ 5)  
+2) `map(Function)` — Transform elements.  
+   Output: `[5, 5, 5]` (word lengths)  
+3) `distinct()` — Remove duplicates (per `equals`).  
+   Output: `[apple, mango, kiwi]`  
+4) `sorted()` — Natural order sort.  
+   Output: `[apple, mango, zebra]`  
+5) `collect(Collector)` — Terminal reduce to container/string.  
+   Output: `APPLE, MANGO, ZEBRA`
+
+---
+
+### `java.util.regex`  {#javautilregex}
+
+#### Pattern / Matcher (compile once, reuse)
+1) `Pattern.compile(String regex)` — Precompile pattern. Throws `PatternSyntaxException`.  
+   Output: `\d+` pattern echoed  
+2) `Pattern.matcher(CharSequence input)` — Create matcher over input.  
+   Output: `true` (has a match)  
+3) `Matcher.find()` — Iterate next match.  
+   Output (two lines): `12 @ 1` and `345 @ 3`  
+4) `Matcher.group()` / `group(int)` — Return matched text / capturing group. Throws `IllegalStateException` if no match yet.  
+   Output: `INV / 2025`  
+5) `Matcher.replaceAll(String repl)` — Replace every match (supports `$1` etc.).  
+   Output: `13/08/2025`
+
+---
+
+## Extending the Content
+
+1) Choose the **package tab** (e.g., `java.util`).  
+2) Duplicate a **class card** (`<div class="card">…</div>`).  
+3) For each new method, duplicate an **accordion item** and update:
+   - Signature (in `<span class="sig">…`), and the **Purpose / Parameters / Returns / Throws / Javadoc summary**
+   - Code snippet (inside `<pre><code id="code-…">`)
+   - Console output (inside `<div class="console" id="out-…">`)
+   - Copy button targets (`data-copy-target="code-…` and `…out-…`)  
+4) Keep examples concise and deterministic so the output is obvious.
+
+---
+
+## Self‑hosting Highlight.js  {#selfhosting-highlightjs}
+
+To run **fully offline** with local assets:
+
+A) Ensure you have the script from the appendix saved as `scripts/setup-highlightjs.sh`, then run:  
+`bash scripts/setup-highlightjs.sh`
+
+This will:
+- Create `assets/highlightjs/` (if missing)
+- Download a pinned Highlight.js version and two themes (dark/light)
+- Save files at:
+  - `assets/highlightjs/highlight.min.js`
+  - `assets/highlightjs/styles/github-dark.min.css`
+  - `assets/highlightjs/styles/github.min.css`
+
+B) In `index.html` (single, local link):
+- In `<head>`:  
+  `<link id="hljs-theme" rel="stylesheet" href="assets/highlightjs/styles/github-dark.min.css">`
+- At end of `<body>`:  
+  `<script src="assets/highlightjs/highlight.min.js"></script>`  
+  `<script>hljs.highlightAll();</script>`
+
+Tip: To switch themes, manually swap the `href` of `#hljs-theme`. Keeping one default is simplest.
+
+---
+
+## Diagrams (PlantUML)  {#diagrams-plantuml}
+
+Component (paste into PlantUML renderer):
+
+```PlantUML
+@startuml  
+skinparam shadowing false  
+skinparam componentStyle rectangle  
+package "Browser" {  
+  [index.html] as UI  
+  [Bootstrap] as BS  
+  [Highlight.js] as HL  
+}  
+node "Nginx (Docker)" as N {  
+  [Static Server]  
+}  
+UI -down-> BS  
+UI -down-> HL  
+UI --> N : GET / (index.html, assets)  
+N --> UI : 200 OK (HTML/CSS/JS)  
+@enduml
+
+Sequence (Copy Code flow):
+
+@startuml  
+actor User  
+boundary UI as "index.html"  
+control Clipboard as "navigator.clipboard"  
+User -> UI : Click "Copy Code"  
+UI -> UI : Find target <code> by id  
+UI -> Clipboard : writeText(source)  
+Clipboard --> UI : Promise resolved  
+UI -> UI : showToast("Copied!")  
 @enduml
 ```
+---
 
-## 🧱 Appendix: Paste‑ready StringBuilder Class Block
+## FAQ
 
-Copy this entire block into the java.lang tab’s grid (e.g., after String) in index.html.
+**Why paraphrase Javadoc instead of quoting?**  
+To keep entries clear and concise. For exact language, use the official JDK docs for your version.
 
-```html
-<!-- StringBuilder -->
-<div class="col-12" id="class-stringbuilder">
-  <div class="card border-0 shadow-sm">
-    <div class="card-body">
-      <h3 class="card-title">
-        <span class="badge text-bg-primary badge-pkg">java.lang.StringBuilder</span>
-      </h3>
-      <p class="text-secondary">Mutable sequence of characters; efficient concatenation and in-place edits.</p>
+**Which Java version do snippets target?**  
+Java 8+ features are used. Prefer an LTS (17 or 21) for local testing.
 
-      <div class="accordion" id="acc-stringbuilder">
+**Can I run without Docker?**  
+Yes—open `index.html` directly, or use any static server (e.g., `python -m http.server 9999`).
 
-        <!-- append(...) -->
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="sb-append-h">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#sb-append">append(…)</button>
-          </h2>
-          <div id="sb-append" class="accordion-collapse collapse show" data-bs-parent="#acc-stringbuilder">
-            <div class="accordion-body">
-              <p class="mb-2"><span class="sig">StringBuilder append(<em>overloads</em>)</span></p>
-              <ul class="small mb-3">
-                <li><strong>Purpose:</strong> Append representations of arguments (primitives, char[], String, Object, etc.).</li>
-                <li><strong>Parameters:</strong> value to append; many overloads.</li>
-                <li><strong>Returns:</strong> <code>this</code> (for chaining).</li>
-                <li><strong>Throws:</strong> —</li>
-                <li><strong>Javadoc (summary):</strong> Appends the string representation of the argument to this sequence.</li>
-              </ul>
-<pre><code id="code-sb-append" class="language-java">public class Demo {
-  public static void main(String[] args) {
-    StringBuilder sb = new StringBuilder("Hello");
-    sb.append(", ").append("Java ").append(21);
-    System.out.println(sb.toString());
-  }
-}</code></pre>
-              <div class="d-flex gap-2 mb-2">
-                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-append">Copy Code</button>
-              </div>
-              <div class="console" id="out-sb-append">Hello, Java 21</div>
-            </div>
-          </div>
-        </div>
+**How do I add a new package?**  
+Add a new **tab** panel in the HTML, copy card patterns inside it, and wire the tab button (`data-bs-target="#your-tab-id"`).
 
-        <!-- insert(int, …) -->
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="sb-insert-h">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sb-insert">insert(int offset, …)</button>
-          </h2>
-          <div id="sb-insert" class="accordion-collapse collapse" data-bs-parent="#acc-stringbuilder">
-            <div class="accordion-body">
-              <p class="mb-2"><span class="sig">StringBuilder insert(int offset, <em>overloads</em>)</span></p>
-              <ul class="small mb-3">
-                <li><strong>Purpose:</strong> Insert text at a given index.</li>
-                <li><strong>Parameters:</strong> <code>offset</code> (0..length); value to insert.</li>
-                <li><strong>Returns:</strong> <code>this</code>.</li>
-                <li><strong>Throws:</strong> <code>StringIndexOutOfBoundsException</code> if offset invalid.</li>
-                <li><strong>Javadoc (summary):</strong> Inserts the string representation of the argument into this sequence.</li>
-              </ul>
-<pre><code id="code-sb-insert" class="language-java">public class Demo {
-  public static void main(String[] args) {
-    StringBuilder sb = new StringBuilder("Helo, Java");
-    sb.insert(2, "l"); // fix "Hello"
-    sb.insert(5, " dear"); 
-    System.out.println(sb.toString());
-  }
-}</code></pre>
-              <div class="d-flex gap-2 mb-2">
-                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-insert">Copy Code</button>
-              </div>
-              <div class="console" id="out-sb-insert">Hello dear, Java</div>
-            </div>
-          </div>
-        </div>
+---
 
-        <!-- delete(int, int) / deleteCharAt(int) -->
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="sb-delete-h">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sb-delete">delete(int start, int end) / deleteCharAt(int index)</button>
-          </h2>
-          <div id="sb-delete" class="accordion-collapse collapse" data-bs-parent="#acc-stringbuilder">
-            <div class="accordion-body">
-              <p class="mb-2"><span class="sig">StringBuilder delete(int start, int end) • StringBuilder deleteCharAt(int index)</span></p>
-              <ul class="small mb-3">
-                <li><strong>Purpose:</strong> Remove a range or a single char.</li>
-                <li><strong>Parameters:</strong> start (inclusive), end (exclusive) / index.</li>
-                <li><strong>Returns:</strong> <code>this</code>.</li>
-                <li><strong>Throws:</strong> <code>StringIndexOutOfBoundsException</code> for invalid indices.</li>
-                <li><strong>Javadoc (summary):</strong> Deletes characters in the specified range or at index.</li>
-              </ul>
-<pre><code id="code-sb-delete" class="language-java">public class Demo {
-  public static void main(String[] args) {
-    StringBuilder sb = new StringBuilder("Hello, ***Java***!");
-    sb.delete(7, 10);        // remove first "***"
-    sb.deleteCharAt(sb.length()-2); // remove last '*'
-    System.out.println(sb.toString());
-  }
-}</code></pre>
-              <div class="d-flex gap-2 mb-2">
-                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-delete">Copy Code</button>
-              </div>
-              <div class="console" id="out-sb-delete">Hello, Java**!</div>
-            </div>
-          </div>
-        </div>
+## License
 
-        <!-- replace(int, int, String) -->
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="sb-replace-h">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sb-replace">replace(int start, int end, String str)</button>
-          </h2>
-          <div id="sb-replace" class="accordion-collapse collapse" data-bs-parent="#acc-stringbuilder">
-            <div class="accordion-body">
-              <p class="mb-2"><span class="sig">StringBuilder replace(int start, int end, String str)</span></p>
-              <ul class="small mb-3">
-                <li><strong>Purpose:</strong> Replace a substring by range.</li>
-                <li><strong>Parameters:</strong> start (inclusive), end (exclusive), replacement.</li>
-                <li><strong>Returns:</strong> <code>this</code>.</li>
-                <li><strong>Throws:</strong> <code>StringIndexOutOfBoundsException</code> if range invalid.</li>
-                <li><strong>Javadoc (summary):</strong> Replaces characters in the specified subsequence.</li>
-              </ul>
-<pre><code id="code-sb-replace" class="language-java">public class Demo {
-  public static void main(String[] args) {
-    StringBuilder sb = new StringBuilder("Order #INV-2024");
-    sb.replace(9, 13, "2025");
-    System.out.println(sb.toString());
-  }
-}</code></pre>
-              <div class="d-flex gap-2 mb-2">
-                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-replace">Copy Code</button>
-              </div>
-              <div class="console" id="out-sb-replace">Order #INV-2025</div>
-            </div>
-          </div>
-        </div>
+MIT
 
-        <!-- reverse() -->
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="sb-reverse-h">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sb-reverse">reverse()</button>
-          </h2>
-          <div id="sb-reverse" class="accordion-collapse collapse" data-bs-parent="#acc-stringbuilder">
-            <div class="accordion-body">
-              <p class="mb-2"><span class="sig">StringBuilder reverse()</span></p>
-              <ul class="small mb-3">
-                <li><strong>Purpose:</strong> Reverse the character sequence in place.</li>
-                <li><strong>Parameters:</strong> —</li>
-                <li><strong>Returns:</strong> <code>this</code>.</li>
-                <li><strong>Throws:</strong> —</li>
-                <li><strong>Javadoc (summary):</strong> Causes this character sequence to be replaced by its reverse.</li>
-              </ul>
-<pre><code id="code-sb-reverse" class="language-java">public class Demo {
-  public static void main(String[] args) {
-    StringBuilder sb = new StringBuilder("LEVEL");
-    sb.reverse();
-    System.out.println(sb.toString());
-  }
-}</code></pre>
-              <div class="d-flex gap-2 mb-2">
-                <button class="btn btn-sm btn-outline-primary" data-copy-target="code-sb-reverse">Copy Code</button>
-              </div>
-              <div class="console" id="out-sb-reverse">LEVEL</div>
-            </div>
-          </div>
-        </div>
+---
 
-      </div><!-- /accordion -->
-    </div>
-  </div>
-</div>
-```
+## Appendix: scripts/setup-highlightjs.sh
 
-## 🔧 Roadmap (suggested next adds)
+Save the following as `scripts/setup-highlightjs.sh`, then run:  
+`bash scripts/setup-highlightjs.sh`
 
-```
-	•	java.util.Set (HashSet): add, contains, remove, size, isEmpty
-	•	java.util.regex (Pattern, Matcher): compile, matcher, find, group, replaceAll
-	•	java.util (ArrayDeque): addFirst/addLast, offerFirst/offerLast, pollFirst/pollLast, peek, push/pop
-	•	java.time (Instant, ZoneId, ZonedDateTime): now, of, atZone, toEpochMilli, parse
-```
-
-# Docker 
-
-## docker/Dockerfile
-
-```dockerfile
-# Simple static server using Nginx
-FROM nginx:stable-alpine
-
-# Copy server config
-COPY default.conf /etc/nginx/conf.d/default.conf
-
-# Serve everything from /usr/share/nginx/html
-# We'll mount the project root at runtime.
-WORKDIR /usr/share/nginx/html
-
-# Healthcheck (optional)
-HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost/ || exit 1
-```
-
-## docker/default.conf
-
-```
-server {
-  listen 80;
-  server_name localhost;
-
-  root   /usr/share/nginx/html;
-  index  index.html;
-
-  location / {
-    try_files $uri $uri/ /index.html;
-  }
-
-  # Basic cache headers for static assets if you add local assets later
-  location ~* \.(?:css|js|png|jpg|jpeg|gif|svg|ico)$ {
-    expires 7d;
-    add_header Cache-Control "public, max-age=604800";
-  }
-}
-```
-
-## docker/.dockerignore
-
-```
-**/.DS_Store
-**/.git
-**/node_modules
-```
-
-## docker-compose.yml (at project root)
-
-```yml
-services:
-  java-api:
-    build: ./docker
-    ports:
-      - "9999:80"
-    volumes:
-      - ./:/usr/share/nginx/html:ro
-```
-
-
-## scripts/setuphighlightjs.sh
+(If you are on Windows, run it in Git Bash or WSL.)
 
 ```sh
-#!/usr/bin/env bash
-set -euo pipefail
+    #!/usr/bin/env bash
+    set -euo pipefail
 
-# Choose a pinned version for stability
-HL_VERSION="11.9.0"
+    # Pinned Highlight.js version for reproducible builds
+    HL_VERSION="11.9.0"
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-ASSET_DIR="$ROOT_DIR/assets/highlightjs"
-STYLE_DIR="$ASSET_DIR/styles"
+    # Resolve project root (script may be called from anywhere)
+    ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    ASSET_DIR="$ROOT_DIR/assets/highlightjs"
+    STYLE_DIR="$ASSET_DIR/styles"
 
-mkdir -p "$STYLE_DIR"
+    mkdir -p "$STYLE_DIR"
 
-echo "Downloading Highlight.js v$HL_VERSION..."
-curl -Ls "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/highlight.min.js" \
-  -o "$ASSET_DIR/highlight.min.js"
+    echo "Downloading Highlight.js v$HL_VERSION into $ASSET_DIR ..."
 
-# Dark + Light themes
-curl -Ls "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/styles/github-dark.min.css" \
-  -o "$STYLE_DIR/github-dark.min.css"
-curl -Ls "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/styles/github.min.css" \
-  -o "$STYLE_DIR/github.min.css"
+    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/highlight.min.js" \
+      -o "$ASSET_DIR/highlight.min.js"
 
-echo "✅ Highlight.js saved under assets/highlightjs/"
-echo "   - JS: assets/highlightjs/highlight.min.js"
-echo "   - CSS (dark): assets/highlightjs/styles/github-dark.min.css"
-echo "   - CSS (light): assets/highlightjs/styles/github.min.css"
+    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/styles/github-dark.min.css" \
+      -o "$STYLE_DIR/github-dark.min.css"
+
+    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/styles/github.min.css" \
+      -o "$STYLE_DIR/github.min.css"
+
+    echo "OK. Files downloaded:"
+    echo "  - $ASSET_DIR/highlight.min.js"
+    echo "  - $STYLE_DIR/github-dark.min.css"
+    echo "  - $STYLE_DIR/github.min.css"
+    echo
+    echo "Next steps:"
+    echo "  1) In index.html <head>:"
+    echo "       <link id=\"hljs-theme\" rel=\"stylesheet\" href=\"assets/highlightjs/styles/github-dark.min.css\">"
+    echo "  2) At end of <body>:"
+    echo "       <script src=\"assets/highlightjs/highlight.min.js\"></script>"
+    echo "       <script>hljs.highlightAll();</script>"
+    echo
+    echo "Done."
 ```
-
