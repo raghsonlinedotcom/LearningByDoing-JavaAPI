@@ -4,25 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Java API — Learning by Doing</title>
-  <!-- Bootstrap 5.3 (CDN) -->
+
+  <!-- Bootstrap 5.3 -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <!-- Highlight.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+
   <style>
-    pre code { font-size: .9rem; }
-    .method-badge { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .console { background:#0b0f14; border:1px solid #1f2833; border-radius:.5rem; padding:.75rem 1rem; color:#c7d5e0; }
     .hero {
       background: radial-gradient(1200px 600px at 70% -10%, rgba(13,110,253,.25), transparent),
                   radial-gradient(800px 400px at 20% -20%, rgba(32,201,151,.18), transparent);
       border-bottom: 1px solid rgba(255,255,255,.08);
     }
-    .kbd {
-      background: #1f2833; border: 1px solid #3b4754; padding: .1rem .45rem; border-radius: .25rem;
-      font-family: ui-monospace, monospace; font-size: .85em;
-    }
+    .kbd { background:#1f2833;border:1px solid #3b4754;padding:.1rem .45rem;border-radius:.25rem;font-family:ui-monospace,monospace;font-size:.85em }
+    pre code { font-size:.9rem }
+    .console { background:#0b0f14;border:1px solid #1f2833;border-radius:.5rem;padding:.75rem 1rem;color:#c7d5e0 }
+    .sig { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace }
+    .badge-pkg { font-family: ui-monospace, monospace }
   </style>
 </head>
 <body>
@@ -31,70 +31,61 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top border-bottom">
   <div class="container-fluid">
     <a class="navbar-brand fw-bold" href="#"><i class="bi bi-braces-asterisk me-2"></i>Java API — Learning by Doing</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#oc">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="d-none d-lg-flex gap-2">
       <a class="btn btn-outline-primary btn-sm" href="#packages">Packages</a>
       <a class="btn btn-outline-success btn-sm" href="#howto">How it works</a>
-      <a class="btn btn-outline-warning btn-sm" href="#" id="showTips">Tips</a>
+      <button class="btn btn-outline-warning btn-sm" id="tipsBtn">Tips</button>
     </div>
   </div>
 </nav>
 
 <!-- Offcanvas -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMenu">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="oc">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title">Quick Nav</h5>
+    <h5 class="offcanvas-title">Package Index</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
   </div>
   <div class="offcanvas-body">
     <div class="list-group">
-      <a href="#packages" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">Packages</a>
-      <a href="#java-lang" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">java.lang</a>
-      <a href="#java-util" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">java.util</a>
-      <a href="#java-time" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">java.time</a>
-      <a href="#java-stream" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">java.util.stream</a>
-      <a href="#howto" class="list-group-item list-group-item-action" data-bs-dismiss="offcanvas">How it works</a>
+      <a class="list-group-item list-group-item-action" href="#java-lang" data-bs-dismiss="offcanvas">java.lang</a>
+      <a class="list-group-item list-group-item-action" href="#java-util" data-bs-dismiss="offcanvas">java.util</a>
+      <a class="list-group-item list-group-item-action" href="#java-time" data-bs-dismiss="offcanvas">java.time</a>
+      <a class="list-group-item list-group-item-action" href="#java-stream" data-bs-dismiss="offcanvas">java.util.stream</a>
     </div>
   </div>
 </div>
 
-<!-- Hero (Jumbotron-ish) -->
+<!-- Hero -->
 <section class="py-5 hero">
   <div class="container">
     <div class="row align-items-center g-4">
       <div class="col-lg-7">
-        <h1 class="display-5 fw-bold">Core Java APIs — Learn by Doing</h1>
+        <h1 class="display-6 fw-bold mb-3">Core Java APIs — Learn by Doing</h1>
         <p class="lead mb-4">
-          Explore the most-used Java methods — organized by package & class — with concise Javadoc-style notes,
-          runnable-style examples, and expected console outputs. Copy, tweak, learn.
+          Tabs by package → Cards by class → 5+ essential methods each, with concise docs, runnable-style examples, and expected outputs.
         </p>
         <div class="d-flex gap-2">
           <a href="#packages" class="btn btn-primary btn-lg"><i class="bi bi-collection me-2"></i>Browse Packages</a>
-          <button class="btn btn-outline-light btn-lg" id="toastWelcomeBtn"><i class="bi bi-lightning-charge me-2"></i>Show Quick Tip</button>
+          <button class="btn btn-outline-light btn-lg" id="welcomeTip"><i class="bi bi-lightning-charge me-2"></i>Quick Tip</button>
         </div>
       </div>
       <div class="col-lg-5">
-        <!-- Carousel -->
         <div id="featureCarousel" class="carousel slide border rounded-4 overflow-hidden shadow">
-          <div class="carousel-indicators">
-            <button type="button" data-bs-target="#featureCarousel" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#featureCarousel" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#featureCarousel" data-bs-slide-to="2"></button>
-          </div>
           <div class="carousel-inner">
             <div class="carousel-item active p-4">
-              <h5 class="fw-semibold mb-2">Tabs per Package</h5>
-              <p class="mb-0">Navigate <span class="kbd">java.lang</span>, <span class="kbd">java.util</span>, <span class="kbd">java.time</span>, and Streams quickly.</p>
+              <h5 class="fw-semibold mb-2">Deep method entries</h5>
+              <p class="mb-0">Signature • Purpose • Params • Returns • Throws • Example • Output</p>
             </div>
             <div class="carousel-item p-4">
-              <h5 class="fw-semibold mb-2">Cards & Accordions</h5>
-              <p class="mb-0">Each class lists 5–10 popular methods with Javadoc-style summaries and examples.</p>
+              <h5 class="fw-semibold mb-2">Copy-friendly</h5>
+              <p class="mb-0">One-click copy for both code and console output, with toasts.</p>
             </div>
             <div class="carousel-item p-4">
-              <h5 class="fw-semibold mb-2">Copy & Toasts</h5>
-              <p class="mb-0">Copy code/output with one click. Toasts confirm your action.</p>
+              <h5 class="fw-semibold mb-2">Extendable</h5>
+              <p class="mb-0">Duplicate a method block to add more classes without changing JS.</p>
             </div>
           </div>
           <button class="carousel-control-prev" type="button" data-bs-target="#featureCarousel" data-bs-slide="prev">
@@ -129,463 +120,856 @@
 
     <div class="tab-content pt-4">
 
-      <!-- java.lang -->
+      <!-- ============================= java.lang ============================= -->
       <div class="tab-pane fade show active" id="java-lang" role="tabpanel" aria-labelledby="lang-tab">
         <div class="row g-4">
 
           <!-- String -->
-          <div class="col-12">
+          <div class="col-12" id="class-string">
             <div class="card border-0 shadow-sm">
               <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-primary method-badge">java.lang.String</span></h3>
-                <p class="text-secondary mb-3">Immutable sequence of characters. Common operations include search, slice, transform.</p>
+                <h3 class="card-title">
+                  <span class="badge text-bg-primary badge-pkg">java.lang.String</span>
+                </h3>
+                <p class="text-secondary">Immutable UTF-16 character sequence; common text utilities.</p>
 
                 <div class="accordion" id="acc-string">
-                  <!-- length -->
+                  <!-- length() -->
                   <div class="accordion-item">
-                    <h2 class="accordion-header" id="str-len-h">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#str-len">length()</button>
+                    <h2 class="accordion-header" id="str-length-h">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#str-length">length()</button>
                     </h2>
-                    <div id="str-len" class="accordion-collapse collapse show" data-bs-parent="#acc-string">
+                    <div id="str-length" class="accordion-collapse collapse show" data-bs-parent="#acc-string">
                       <div class="accordion-body">
-                        <p><strong>Summary:</strong> Returns the number of <em>char</em> values in this string.</p>
-                        <div class="row g-3">
-                          <div class="col-lg-7">
-<pre><code class="language-java">// String.length()
-public class Demo {
+                        <p class="mb-2"><span class="sig">int length()</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Count the number of <em>char</em> values.</li>
+                          <li><strong>Parameters:</strong> none</li>
+                          <li><strong>Returns:</strong> length of this string.</li>
+                          <li><strong>Throws:</strong> —</li>
+                          <li><strong>Javadoc (summary):</strong> Returns the string’s character count as an <code>int</code>.</li>
+                        </ul>
+<pre><code id="code-str-length" class="language-java">public class Demo {
   public static void main(String[] args) {
     String s = "Hello, Java!";
     System.out.println(s.length());
   }
 }</code></pre>
-                            <button class="btn btn-sm btn-outline-primary me-2" data-copy="str-len-code">Copy Code</button>
-                            <button class="btn btn-sm btn-outline-secondary" data-copy="str-len-out">Copy Output</button>
-                          </div>
-                          <div class="col-lg-5">
-                            <div class="console" id="str-len-out">13</div>
-                          </div>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-str-length">Copy Code</button>
+                          <button class="btn btn-sm btn-outline-secondary" data-copy-target="out-str-length">Copy Output</button>
                         </div>
+                        <div class="console" id="out-str-length">13</div>
                       </div>
                     </div>
                   </div>
-                  <!-- substring -->
+                  <!-- substring(int,int) -->
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="str-sub-h">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#str-sub">substring(int begin, int end)</button>
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#str-sub">substring(int beginIndex, int endIndex)</button>
                     </h2>
                     <div id="str-sub" class="accordion-collapse collapse" data-bs-parent="#acc-string">
                       <div class="accordion-body">
-                        <p><strong>Summary:</strong> Returns a new string that is a substring of this string from <code>begin</code> (inclusive) to <code>end</code> (exclusive).</p>
-                        <div class="row g-3">
-                          <div class="col-lg-7">
-<pre><code class="language-java">public class Demo {
+                        <p class="mb-2"><span class="sig">String substring(int beginIndex, int endIndex)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Extract a portion of the string.</li>
+                          <li><strong>Parameters:</strong> <code>beginIndex</code> inclusive, <code>endIndex</code> exclusive.</li>
+                          <li><strong>Returns:</strong> substring in range.</li>
+                          <li><strong>Throws:</strong> <code>IndexOutOfBoundsException</code> if indices are invalid.</li>
+                          <li><strong>Javadoc (summary):</strong> Returns a new string containing chars from the specified range.</li>
+                        </ul>
+<pre><code id="code-str-sub" class="language-java">public class Demo {
   public static void main(String[] args) {
     String s = "Transaction#INV-2025";
     System.out.println(s.substring(0, 12));  // "Transaction"
     System.out.println(s.substring(13));     // "INV-2025"
   }
 }</code></pre>
-                            <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
-                          </div>
-                          <div class="col-lg-5">
-                            <div class="console">Transaction
-INV-2025</div>
-                          </div>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-str-sub">Copy Code</button>
                         </div>
+                        <div class="console">Transaction
+INV-2025</div>
                       </div>
                     </div>
                   </div>
-                  <!-- contains / toUpperCase / replace / split -->
+                  <!-- contains(CharSequence) -->
                   <div class="accordion-item">
-                    <h2 class="accordion-header" id="str-misc-h">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#str-misc">contains, toUpperCase, replace, split</button>
+                    <h2 class="accordion-header" id="str-contains-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#str-contains">contains(CharSequence s)</button>
                     </h2>
-                    <div id="str-misc" class="accordion-collapse collapse" data-bs-parent="#acc-string">
+                    <div id="str-contains" class="accordion-collapse collapse" data-bs-parent="#acc-string">
                       <div class="accordion-body">
-                        <div class="row g-3">
-                          <div class="col-lg-7">
-<pre><code class="language-java">import java.util.Arrays;
-
+                        <p class="mb-2"><span class="sig">boolean contains(CharSequence s)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Test if the sequence occurs in this string.</li>
+                          <li><strong>Parameters:</strong> substring to search.</li>
+                          <li><strong>Returns:</strong> <code>true</code> if found, else <code>false</code>.</li>
+                          <li><strong>Throws:</strong> —</li>
+                          <li><strong>Javadoc (summary):</strong> Checks for the presence of a <code>CharSequence</code> within the string.</li>
+                        </ul>
+<pre><code id="code-str-contains" class="language-java">public class Demo {
+  public static void main(String[] args) {
+    String s = "alpha,beta,gamma";
+    System.out.println(s.contains("beta")); // true
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-str-contains">Copy Code</button>
+                        </div>
+                        <div class="console">true</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- replace(CharSequence, CharSequence) -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="str-replace-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#str-replace">replace(CharSequence target, CharSequence replacement)</button>
+                    </h2>
+                    <div id="str-replace" class="accordion-collapse collapse" data-bs-parent="#acc-string">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">String replace(CharSequence target, CharSequence replacement)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Replace all non-overlapping occurrences of <code>target</code>.</li>
+                          <li><strong>Parameters:</strong> target text; replacement.</li>
+                          <li><strong>Returns:</strong> new string with replacements.</li>
+                          <li><strong>Throws:</strong> —</li>
+                          <li><strong>Javadoc (summary):</strong> Produces a string where each appearance of the target is substituted.</li>
+                        </ul>
+<pre><code id="code-str-replace" class="language-java">public class Demo {
+  public static void main(String[] args) {
+    String s = "alpha,beta,gamma";
+    System.out.println(s.replace("beta","B")); // alpha,B,gamma
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-str-replace">Copy Code</button>
+                        </div>
+                        <div class="console">alpha,B,gamma</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- split(String) -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="str-split-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#str-split">split(String regex)</button>
+                    </h2>
+                    <div id="str-split" class="accordion-collapse collapse" data-bs-parent="#acc-string">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">String[] split(String regex)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Tokenize by a regular expression.</li>
+                          <li><strong>Parameters:</strong> regex delimiter.</li>
+                          <li><strong>Returns:</strong> array of tokens.</li>
+                          <li><strong>Throws:</strong> <code>PatternSyntaxException</code> if regex is invalid.</li>
+                          <li><strong>Javadoc (summary):</strong> Splits this string around matches of the given regex.</li>
+                        </ul>
+<pre><code id="code-str-split" class="language-java">import java.util.Arrays;
 public class Demo {
   public static void main(String[] args) {
     String s = "alpha,beta,gamma";
-    System.out.println(s.contains("beta"));      // true
-    System.out.println(s.toUpperCase());         // ALPHA,BETA,GAMMA
-    System.out.println(s.replace("beta", "B"));  // alpha,B,gamma
-    System.out.println(Arrays.toString(s.split(","))); // [alpha, beta, gamma]
+    System.out.println(Arrays.toString(s.split(",")));
   }
 }</code></pre>
-                            <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
-                          </div>
-                          <div class="col-lg-5">
-                            <div class="console">true
-ALPHA,BETA,GAMMA
-alpha,B,gamma
-[alpha, beta, gamma]</div>
-                          </div>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-str-split">Copy Code</button>
                         </div>
+                        <div class="console">[alpha, beta, gamma]</div>
                       </div>
                     </div>
                   </div>
                 </div><!-- /accordion -->
               </div>
             </div>
-          </div>
-
-          <!-- Math -->
-          <div class="col-12">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-primary method-badge">java.lang.Math</span></h3>
-                <p class="text-secondary mb-3">Basic numeric operations and utilities.</p>
-
-                <div class="row g-3">
-                  <div class="col-lg-7">
-<pre><code class="language-java">public class Demo {
-  public static void main(String[] args) {
-    System.out.println(Math.max(10, 25));   // 25
-    System.out.println(Math.min(10, 25));   // 10
-    System.out.println(Math.pow(2, 10));    // 1024.0
-    System.out.println(Math.sqrt(144));     // 12.0
-    System.out.println(Math.round(3.49));   // 3
-    System.out.println(Math.random() &gt;= 0.0 &amp;&amp; Math.random() &lt; 1.0); // true
-  }
-}</code></pre>
-                    <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
-                  </div>
-                  <div class="col-lg-5">
-                    <div class="console">25
-10
-1024.0
-12.0
-3
-true</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Objects & System -->
-          <div class="col-12">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-primary method-badge">java.lang.Objects &amp; System</span></h3>
-                <p class="text-secondary mb-3">Null checks, safe equals, hashing; environment/system utilities.</p>
-
-                <div class="row g-3">
-                  <div class="col-lg-7">
-<pre><code class="language-java">import java.util.Objects;
-import java.util.Arrays;
-
-public class Demo {
-  public static void main(String[] args) {
-    String name = "Raghav";
-    System.out.println(Objects.requireNonNull(name));
-    System.out.println(Objects.equals("a", "a"));      // true
-    System.out.println(Objects.hash("x", 1, true));    // stable hash (example)
-    System.out.println(System.getProperty("os.name")); // e.g., "Mac OS X"
-    String[] src = {"A","B","C","D"};
-    String[] dst = new String[2];
-    System.arraycopy(src, 1, dst, 0, 2);
-    System.out.println(Arrays.toString(dst));          // [B, C]
-  }
-}</code></pre>
-                    <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
-                  </div>
-                  <div class="col-lg-5">
-                    <div class="console">Raghav
-true
-&lt;some hash&gt;
-&lt;your OS name&gt;
-[B, C]</div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
+          </div><!-- /String -->
 
         </div>
-      </div><!-- /java.lang -->
+      </div>
+      <!-- ============================= /java.lang ============================= -->
 
-      <!-- java.util -->
+      <!-- ============================= java.util ============================= -->
       <div class="tab-pane fade" id="java-util" role="tabpanel" aria-labelledby="util-tab">
         <div class="row g-4">
 
           <!-- List / ArrayList -->
-          <div class="col-12">
+          <div class="col-12" id="class-list">
             <div class="card border-0 shadow-sm">
               <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-success method-badge">java.util.List (ArrayList)</span></h3>
-                <p class="text-secondary mb-3">Ordered, index-based collection; allows duplicates.</p>
-                <div class="row g-3">
-                  <div class="col-lg-7">
-<pre><code class="language-java">import java.util.*;
+                <h3 class="card-title"><span class="badge text-bg-success badge-pkg">java.util.List (ArrayList)</span></h3>
+                <p class="text-secondary">Ordered, index-based collection; allows duplicates.</p>
 
+                <div class="accordion" id="acc-list">
+                  <!-- add(E) -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="list-add-h">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#list-add">add(E e)</button>
+                    </h2>
+                    <div id="list-add" class="accordion-collapse collapse show" data-bs-parent="#acc-list">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">boolean add(E e)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Append an element.</li>
+                          <li><strong>Parameters:</strong> element to add.</li>
+                          <li><strong>Returns:</strong> typically <code>true</code> for lists that grow.</li>
+                          <li><strong>Throws:</strong> Optional <code>UnsupportedOperationException</code> for fixed-size lists.</li>
+                          <li><strong>Javadoc (summary):</strong> Adds the specified element to the end.</li>
+                        </ul>
+<pre><code id="code-list-add" class="language-java">import java.util.*;
 public class Demo {
   public static void main(String[] args) {
     List&lt;String&gt; list = new ArrayList<>();
     list.add("Apple");
     list.add("Orange");
-    list.add("Banana");
-    System.out.println(list.get(1));         // Orange
-    System.out.println(list.contains("Banana")); // true
-    list.sort(Comparator.naturalOrder());    // Java 8+
-    System.out.println(list);                // [Apple, Banana, Orange]
+    System.out.println(list); // [Apple, Orange]
   }
 }</code></pre>
-                    <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
-                  </div>
-                  <div class="col-lg-5">
-                    <div class="console">Orange
-true
-[Apple, Banana, Orange]</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Map / HashMap -->
-          <div class="col-12">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-success method-badge">java.util.Map (HashMap)</span></h3>
-                <p class="text-secondary mb-3">Key-value mapping with fast average-time operations.</p>
-                <div class="row g-3">
-                  <div class="col-lg-7">
-<pre><code class="language-java">import java.util.*;
-
-public class Demo {
-  public static void main(String[] args) {
-    Map&lt;String, Integer&gt; counts = new HashMap<>();
-    counts.put("apple", 2);
-    counts.put("orange", 1);
-    System.out.println(counts.get("apple"));           // 2
-    System.out.println(counts.containsKey("banana"));  // false
-    counts.computeIfAbsent("banana", k -&gt; 0);
-    counts.merge("banana", 3, Integer::sum);           // 3
-    counts.forEach((k,v) -&gt; System.out.println(k + "=" + v));
-  }
-}</code></pre>
-                    <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
-                  </div>
-                  <div class="col-lg-5">
-                    <div class="console">2
-false
-apple=2
-orange=1
-banana=3</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Collections & Arrays & Optional -->
-          <div class="col-12">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-success method-badge">Collections, Arrays, Optional</span></h3>
-                <p class="text-secondary mb-3">Helpers for collections/arrays and an expressive container for optional values.</p>
-
-                <div class="accordion" id="acc-util">
-                  <div class="accordion-item">
-                    <h2 class="accordion-header" id="util-coll-h">
-                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#util-coll">Collections</button>
-                    </h2>
-                    <div id="util-coll" class="accordion-collapse collapse show" data-bs-parent="#acc-util">
-                      <div class="accordion-body">
-<pre><code class="language-java">import java.util.*;
-
-public class Demo {
-  public static void main(String[] args) {
-    List&lt;Integer&gt; nums = new ArrayList&lt;&gt;(List.of(3,1,4,1,5));
-    Collections.sort(nums);
-    System.out.println(nums);           // [1,1,3,4,5]
-    Collections.reverse(nums);
-    System.out.println(nums);           // [5,4,3,1,1]
-    System.out.println(Collections.frequency(nums, 1)); // 2
-    List&lt;Integer&gt; ro = Collections.unmodifiableList(nums);
-    System.out.println(ro);
-  }
-}</code></pre>
-                        <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-list-add">Copy Code</button>
+                        </div>
+                        <div class="console">[Apple, Orange]</div>
                       </div>
                     </div>
                   </div>
-
+                  <!-- get(int) -->
                   <div class="accordion-item">
-                    <h2 class="accordion-header" id="util-arr-h">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#util-arr">Arrays</button>
+                    <h2 class="accordion-header" id="list-get-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#list-get">get(int index)</button>
                     </h2>
-                    <div id="util-arr" class="accordion-collapse collapse" data-bs-parent="#acc-util">
+                    <div id="list-get" class="accordion-collapse collapse" data-bs-parent="#acc-list">
                       <div class="accordion-body">
-<pre><code class="language-java">import java.util.*;
-import java.util.stream.*;
-import java.util.Arrays;
-
+                        <p class="mb-2"><span class="sig">E get(int index)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Access by position.</li>
+                          <li><strong>Parameters:</strong> zero-based index.</li>
+                          <li><strong>Returns:</strong> element at index.</li>
+                          <li><strong>Throws:</strong> <code>IndexOutOfBoundsException</code> for invalid index.</li>
+                          <li><strong>Javadoc (summary):</strong> Returns the element at the specified index.</li>
+                        </ul>
+<pre><code id="code-list-get" class="language-java">import java.util.*;
 public class Demo {
   public static void main(String[] args) {
-    int[] a = {5,2,9,1};
-    Arrays.sort(a); // [1,2,5,9]
-    System.out.println(Arrays.binarySearch(a, 5)); // index
-    System.out.println(Arrays.toString(Arrays.copyOf(a, 3))); // [1,2,5]
-    System.out.println(Arrays.asList("A","B","C")); // fixed-size list
-    System.out.println(Arrays.stream(a).boxed().collect(Collectors.toList()));
+    List&lt;String&gt; list = new ArrayList<>(List.of("A","B","C"));
+    System.out.println(list.get(1)); // B
   }
 }</code></pre>
-                        <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-list-get">Copy Code</button>
+                        </div>
+                        <div class="console">B</div>
                       </div>
                     </div>
                   </div>
-
+                  <!-- set(int,E) -->
                   <div class="accordion-item">
-                    <h2 class="accordion-header" id="util-opt-h">
-                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#util-opt">Optional</button>
+                    <h2 class="accordion-header" id="list-set-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#list-set">set(int index, E element)</button>
                     </h2>
-                    <div id="util-opt" class="accordion-collapse collapse" data-bs-parent="#acc-util">
+                    <div id="list-set" class="accordion-collapse collapse" data-bs-parent="#acc-list">
                       <div class="accordion-body">
-<pre><code class="language-java">import java.util.Optional;
-
+                        <p class="mb-2"><span class="sig">E set(int index, E element)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Replace the element at index.</li>
+                          <li><strong>Parameters:</strong> index; new element.</li>
+                          <li><strong>Returns:</strong> previously stored element.</li>
+                          <li><strong>Throws:</strong> <code>IndexOutOfBoundsException</code>.</li>
+                          <li><strong>Javadoc (summary):</strong> Assigns a new value at the given index.</li>
+                        </ul>
+<pre><code id="code-list-set" class="language-java">import java.util.*;
 public class Demo {
   public static void main(String[] args) {
-    Optional&lt;String&gt; maybe = Optional.ofNullable(System.getenv("USER_NAME"));
-    String val = maybe.orElse("guest");
-    System.out.println(val);
-    maybe.map(String::toUpperCase)
-         .ifPresent(System.out::println);
+    List&lt;String&gt; list = new ArrayList<>(List.of("A","B","C"));
+    String old = list.set(1, "X");
+    System.out.println(old + " -> " + list); // B -> [A, X, C]
   }
 }</code></pre>
-                        <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-list-set">Copy Code</button>
+                        </div>
+                        <div class="console">B -> [A, X, C]</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- remove(index/object) -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="list-remove-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#list-remove">remove(int index) / remove(Object o)</button>
+                    </h2>
+                    <div id="list-remove" class="accordion-collapse collapse" data-bs-parent="#acc-list">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">E remove(int index) • boolean remove(Object o)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Delete by position or by value.</li>
+                          <li><strong>Parameters:</strong> index or object to remove.</li>
+                          <li><strong>Returns:</strong> removed element / whether removal happened.</li>
+                          <li><strong>Throws:</strong> <code>IndexOutOfBoundsException</code> for index variant.</li>
+                          <li><strong>Javadoc (summary):</strong> Removes a single element by index or first match by value.</li>
+                        </ul>
+<pre><code id="code-list-remove" class="language-java">import java.util.*;
+public class Demo {
+  public static void main(String[] args) {
+    List&lt;String&gt; list = new ArrayList<>(List.of("A","B","C","B"));
+    list.remove(2);            // remove "C"
+    list.remove("B");          // remove first "B"
+    System.out.println(list);  // [A, B]
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-list-remove">Copy Code</button>
+                        </div>
+                        <div class="console">[A, B]</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- sort(Comparator) -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="list-sort-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#list-sort">sort(Comparator&lt;? super E&gt; c)</button>
+                    </h2>
+                    <div id="list-sort" class="accordion-collapse collapse" data-bs-parent="#acc-list">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">default void sort(Comparator&lt;? super E&gt; c)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> In-place sort according to comparator.</li>
+                          <li><strong>Parameters:</strong> comparator (or <code>null</code> for natural order).</li>
+                          <li><strong>Returns:</strong> —</li>
+                          <li><strong>Throws:</strong> <code>ClassCastException</code> if elements not mutually comparable in natural order.</li>
+                          <li><strong>Javadoc (summary):</strong> Sorts this list using the provided comparator.</li>
+                        </ul>
+<pre><code id="code-list-sort" class="language-java">import java.util.*;
+public class Demo {
+  public static void main(String[] args) {
+    List&lt;String&gt; list = new ArrayList<>(List.of("mango","apple","kiwi"));
+    list.sort(Comparator.naturalOrder());
+    System.out.println(list); // [apple, kiwi, mango]
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-list-sort">Copy Code</button>
+                        </div>
+                        <div class="console">[apple, kiwi, mango]</div>
                       </div>
                     </div>
                   </div>
                 </div><!-- /accordion -->
               </div>
             </div>
-          </div>
+          </div><!-- /List -->
+
+          <!-- Map / HashMap -->
+          <div class="col-12" id="class-map">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body">
+                <h3 class="card-title"><span class="badge text-bg-success badge-pkg">java.util.Map (HashMap)</span></h3>
+                <p class="text-secondary">Key-value mapping with fast average-time operations.</p>
+
+                <div class="accordion" id="acc-map">
+                  <!-- put -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="map-put-h">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#map-put">put(K key, V value)</button>
+                    </h2>
+                    <div id="map-put" class="accordion-collapse collapse show" data-bs-parent="#acc-map">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">V put(K key, V value)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Insert or replace value for key.</li>
+                          <li><strong>Parameters:</strong> key, value.</li>
+                          <li><strong>Returns:</strong> previous value or <code>null</code>.</li>
+                          <li><strong>Throws:</strong> <code>NullPointerException</code> for some map impls disallowing nulls.</li>
+                          <li><strong>Javadoc (summary):</strong> Associates value with key, returning old value if present.</li>
+                        </ul>
+<pre><code id="code-map-put" class="language-java">import java.util.*;
+public class Demo {
+  public static void main(String[] args) {
+    Map&lt;String,Integer&gt; m = new HashMap<>();
+    System.out.println(m.put("apple", 2)); // null
+    System.out.println(m.put("apple", 3)); // 2
+    System.out.println(m);                 // {apple=3}
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-map-put">Copy Code</button>
+                        </div>
+                        <div class="console">null
+2
+{apple=3}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- getOrDefault -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="map-god-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#map-god">getOrDefault(Object key, V defaultValue)</button>
+                    </h2>
+                    <div id="map-god" class="accordion-collapse collapse" data-bs-parent="#acc-map">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">V getOrDefault(Object key, V defaultValue)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Lookup with fallback.</li>
+                          <li><strong>Parameters:</strong> key, default value.</li>
+                          <li><strong>Returns:</strong> mapped value or default.</li>
+                          <li><strong>Throws:</strong> —</li>
+                          <li><strong>Javadoc (summary):</strong> Returns the value to which the key is mapped, else the given default.</li>
+                        </ul>
+<pre><code id="code-map-god" class="language-java">import java.util.*;
+public class Demo {
+  public static void main(String[] args) {
+    Map&lt;String,Integer&gt; m = new HashMap<>(Map.of("a",1));
+    System.out.println(m.getOrDefault("b", 99)); // 99
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-map-god">Copy Code</button>
+                        </div>
+                        <div class="console">99</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- containsKey -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="map-ck-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#map-ck">containsKey(Object key)</button>
+                    </h2>
+                    <div id="map-ck" class="accordion-collapse collapse" data-bs-parent="#acc-map">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">boolean containsKey(Object key)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Check existence of key.</li>
+                          <li><strong>Parameters:</strong> key.</li>
+                          <li><strong>Returns:</strong> <code>true</code> if present.</li>
+                          <li><strong>Throws:</strong> —</li>
+                          <li><strong>Javadoc (summary):</strong> Tests whether the map contains the specified key.</li>
+                        </ul>
+<pre><code id="code-map-ck" class="language-java">import java.util.*;
+public class Demo {
+  public static void main(String[] args) {
+    Map&lt;String,Integer&gt; m = new HashMap<>(Map.of("a",1,"b",2));
+    System.out.println(m.containsKey("b")); // true
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-map-ck">Copy Code</button>
+                        </div>
+                        <div class="console">true</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- computeIfAbsent -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="map-cia-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#map-cia">computeIfAbsent(K key, Function&lt;? super K,? extends V&gt; mappingFunction)</button>
+                    </h2>
+                    <div id="map-cia" class="accordion-collapse collapse" data-bs-parent="#acc-map">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">V computeIfAbsent(K key, Function&lt;? super K,? extends V&gt; f)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Lazily create a value only if key is missing.</li>
+                          <li><strong>Parameters:</strong> key; mapping function.</li>
+                          <li><strong>Returns:</strong> existing or computed value.</li>
+                          <li><strong>Throws:</strong> if function throws; <code>NullPointerException</code> if null key when map forbids.</li>
+                          <li><strong>Javadoc (summary):</strong> If key absent, computes value with the function and stores it.</li>
+                        </ul>
+<pre><code id="code-map-cia" class="language-java">import java.util.*;
+public class Demo {
+  public static void main(String[] args) {
+    Map&lt;String,Integer&gt; m = new HashMap<>();
+    m.computeIfAbsent("apple", k -&gt; 0);
+    m.put("apple", m.get("apple") + 2);
+    System.out.println(m); // {apple=2}
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-map-cia">Copy Code</button>
+                        </div>
+                        <div class="console">{apple=2}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- merge -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="map-merge-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#map-merge">merge(K key, V value, BiFunction&lt;? super V,? super V,? extends V&gt; remappingFunction)</button>
+                    </h2>
+                    <div id="map-merge" class="accordion-collapse collapse" data-bs-parent="#acc-map">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">V merge(K key, V value, BiFunction&lt;V,V,V&gt; f)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Combine existing and new values atomically.</li>
+                          <li><strong>Parameters:</strong> key, value to merge, merge function.</li>
+                          <li><strong>Returns:</strong> new value associated, or removed if function returns null.</li>
+                          <li><strong>Throws:</strong> if function throws.</li>
+                          <li><strong>Javadoc (summary):</strong> Merges value with existing mapping using a remapping function.</li>
+                        </ul>
+<pre><code id="code-map-merge" class="language-java">import java.util.*;
+public class Demo {
+  public static void main(String[] args) {
+    Map&lt;String,Integer&gt; m = new HashMap<>(Map.of("banana",1));
+    m.merge("banana", 3, Integer::sum);
+    System.out.println(m.get("banana")); // 4
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-map-merge">Copy Code</button>
+                        </div>
+                        <div class="console">4</div>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- /accordion -->
+              </div>
+            </div>
+          </div><!-- /Map -->
 
         </div>
-      </div><!-- /java.util -->
+      </div>
+      <!-- ============================= /java.util ============================= -->
 
-      <!-- java.time -->
+      <!-- ============================= java.time ============================= -->
       <div class="tab-pane fade" id="java-time" role="tabpanel" aria-labelledby="time-tab">
         <div class="row g-4">
 
           <!-- LocalDate -->
-          <div class="col-12">
+          <div class="col-12" id="class-localdate">
             <div class="card border-0 shadow-sm">
               <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-warning method-badge">java.time.LocalDate</span></h3>
-                <p class="text-secondary mb-3">ISO-8601 date without time-zone.</p>
-                <div class="row g-3">
-                  <div class="col-lg-7">
-<pre><code class="language-java">import java.time.*;
-import java.time.format.DateTimeFormatter;
+                <h3 class="card-title"><span class="badge text-bg-warning badge-pkg">java.time.LocalDate</span></h3>
+                <p class="text-secondary">Immutable date without time-zone; ISO-8601 calendar system.</p>
 
+                <div class="accordion" id="acc-localdate">
+                  <!-- now() -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="ld-now-h">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ld-now">now()</button>
+                    </h2>
+                    <div id="ld-now" class="accordion-collapse collapse show" data-bs-parent="#acc-localdate">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">static LocalDate now()</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Current date from system clock.</li>
+                          <li><strong>Parameters:</strong> —</li>
+                          <li><strong>Returns:</strong> today’s date.</li>
+                          <li><strong>Throws:</strong> —</li>
+                          <li><strong>Javadoc (summary):</strong> Obtains the current date from the default time-zone.</li>
+                        </ul>
+<pre><code id="code-ld-now" class="language-java">import java.time.*;
+public class Demo {
+  public static void main(String[] args) {
+    System.out.println(LocalDate.now());
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-ld-now">Copy Code</button>
+                        </div>
+                        <div class="console">&lt;today&gt;</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- of(y,m,d) -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="ld-of-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ld-of">of(int year, int month, int dayOfMonth)</button>
+                    </h2>
+                    <div id="ld-of" class="accordion-collapse collapse" data-bs-parent="#acc-localdate">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">static LocalDate of(int y, int m, int d)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Create a specific date.</li>
+                          <li><strong>Parameters:</strong> year, month (1–12), day.</li>
+                          <li><strong>Returns:</strong> date instance.</li>
+                          <li><strong>Throws:</strong> <code>DateTimeException</code> for invalid fields.</li>
+                          <li><strong>Javadoc (summary):</strong> Returns a LocalDate with the given year, month, and day.</li>
+                        </ul>
+<pre><code id="code-ld-of" class="language-java">import java.time.*;
+public class Demo {
+  public static void main(String[] args) {
+    LocalDate d = LocalDate.of(2025, 10, 20);
+    System.out.println(d); // 2025-10-20
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-ld-of">Copy Code</button>
+                        </div>
+                        <div class="console">2025-10-20</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- plusDays -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="ld-plus-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ld-plus">plusDays(long daysToAdd)</button>
+                    </h2>
+                    <div id="ld-plus" class="accordion-collapse collapse" data-bs-parent="#acc-localdate">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">LocalDate plusDays(long days)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Add a number of days, returning a new date.</li>
+                          <li><strong>Parameters:</strong> days to add (negative to subtract).</li>
+                          <li><strong>Returns:</strong> adjusted date.</li>
+                          <li><strong>Throws:</strong> <code>DateTimeException</code> on overflow.</li>
+                          <li><strong>Javadoc (summary):</strong> Returns a copy of this date with the days added.</li>
+                        </ul>
+<pre><code id="code-ld-plus" class="language-java">import java.time.*;
+public class Demo {
+  public static void main(String[] args) {
+    LocalDate d = LocalDate.of(2025, 10, 20);
+    System.out.println(d.plusDays(5)); // 2025-10-25
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-ld-plus">Copy Code</button>
+                        </div>
+                        <div class="console">2025-10-25</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- format -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="ld-format-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ld-format">format(DateTimeFormatter formatter)</button>
+                    </h2>
+                    <div id="ld-format" class="accordion-collapse collapse" data-bs-parent="#acc-localdate">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">String format(DateTimeFormatter f)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Convert to formatted text.</li>
+                          <li><strong>Parameters:</strong> formatter.</li>
+                          <li><strong>Returns:</strong> formatted string.</li>
+                          <li><strong>Throws:</strong> <code>DateTimeException</code> if formatting fails.</li>
+                          <li><strong>Javadoc (summary):</strong> Formats this date using the specified formatter.</li>
+                        </ul>
+<pre><code id="code-ld-format" class="language-java">import java.time.*;
+import java.time.format.DateTimeFormatter;
 public class Demo {
   public static void main(String[] args) {
     LocalDate today = LocalDate.now();
-    LocalDate diwali = LocalDate.of(2025, 10, 20); // example
-    System.out.println(today);
-    System.out.println(diwali.plusDays(5));
     DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
     System.out.println(today.format(fmt));
   }
 }</code></pre>
-                    <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-ld-format">Copy Code</button>
+                        </div>
+                        <div class="console">&lt;today in dd-MMM-yyyy&gt;</div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-lg-5">
-                    <div class="console">&lt;today&gt;
-2025-10-25
-&lt;today in dd-MMM-yyyy&gt;</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- LocalDateTime & Duration -->
-          <div class="col-12">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-warning method-badge">LocalDateTime &amp; Duration</span></h3>
-                <p class="text-secondary mb-3">Date-time without zone; machine-intervals between instants or temporal objects.</p>
-                <div class="row g-3">
-                  <div class="col-lg-7">
-<pre><code class="language-java">import java.time.*;
-import java.time.format.DateTimeFormatter;
-
+                  <!-- parse -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="ld-parse-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ld-parse">parse(CharSequence text)</button>
+                    </h2>
+                    <div id="ld-parse" class="accordion-collapse collapse" data-bs-parent="#acc-localdate">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">static LocalDate parse(CharSequence text)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Parse ISO-8601 text (YYYY-MM-DD).</li>
+                          <li><strong>Parameters:</strong> text to parse.</li>
+                          <li><strong>Returns:</strong> parsed date.</li>
+                          <li><strong>Throws:</strong> <code>DateTimeParseException</code> if text invalid.</li>
+                          <li><strong>Javadoc (summary):</strong> Obtains an instance from text using ISO format.</li>
+                        </ul>
+<pre><code id="code-ld-parse" class="language-java">import java.time.*;
 public class Demo {
   public static void main(String[] args) {
-    LocalDateTime now = LocalDateTime.now();
-    LocalDateTime later = now.plusHours(5).minusDays(1);
-    Duration d = Duration.between(now, later);
-    System.out.println(d.toHours()); // 5 - 24 if minusDays(1) first? Here computed on ordered times.
-    System.out.println(now.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+    System.out.println(LocalDate.parse("2025-10-20")); // 2025-10-20
   }
 }</code></pre>
-                    <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-ld-parse">Copy Code</button>
+                        </div>
+                        <div class="console">2025-10-20</div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-lg-5">
-                    <div class="console">&lt;hours difference&gt;
-&lt;current ISO date-time&gt;</div>
-                  </div>
-                </div>
+                </div><!-- /accordion -->
               </div>
             </div>
-          </div>
+          </div><!-- /LocalDate -->
 
         </div>
-      </div><!-- /java.time -->
+      </div>
+      <!-- ============================= /java.time ============================= -->
 
-      <!-- java.util.stream -->
+      <!-- ============================= java.util.stream ============================= -->
       <div class="tab-pane fade" id="java-stream" role="tabpanel" aria-labelledby="stream-tab">
         <div class="row g-4">
 
-          <!-- Stream basics -->
-          <div class="col-12">
+          <!-- Stream core -->
+          <div class="col-12" id="class-stream">
             <div class="card border-0 shadow-sm">
               <div class="card-body">
-                <h3 class="card-title"><span class="badge text-bg-info method-badge">java.util.stream.Stream</span></h3>
-                <p class="text-secondary mb-3">Functional-style operations on sequences: map, filter, reduce, collect.</p>
-                <div class="row g-3">
-                  <div class="col-lg-7">
-<pre><code class="language-java">import java.util.*;
-import java.util.stream.*;
+                <h3 class="card-title"><span class="badge text-bg-info badge-pkg">java.util.stream.Stream</span></h3>
+                <p class="text-secondary">Functional operations: filter, map, distinct, sorted, collect.</p>
 
+                <div class="accordion" id="acc-stream">
+                  <!-- filter -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="st-filter-h">
+                      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#st-filter">filter(Predicate&lt;? super T&gt; predicate)</button>
+                    </h2>
+                    <div id="st-filter" class="accordion-collapse collapse show" data-bs-parent="#acc-stream">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">&lt;R&gt; Stream&lt;T&gt; filter(Predicate&lt;? super T&gt; p)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Keep elements satisfying predicate.</li>
+                          <li><strong>Parameters:</strong> predicate.</li>
+                          <li><strong>Returns:</strong> filtered stream.</li>
+                          <li><strong>Throws:</strong> if predicate throws.</li>
+                          <li><strong>Javadoc (summary):</strong> Returns a stream with elements that match the predicate.</li>
+                        </ul>
+<pre><code id="code-st-filter" class="language-java">import java.util.*;
+import java.util.stream.*;
 public class Demo {
   public static void main(String[] args) {
-    List&lt;String&gt; words = List.of("zebra","apple","mango","apple","kiwi");
-    String joined = words.stream()
-      .filter(w -&gt; w.length() &gt;= 5)     // filter
-      .map(String::toUpperCase)         // map
-      .distinct()                       // distinct
-      .sorted()                         // sorted
-      .collect(Collectors.joining(", "));
-    System.out.println(joined);         // APPLE, MANGO, ZEBRA
-
-    int total = IntStream.rangeClosed(1, 5).reduce(0, Integer::sum);
-    System.out.println(total);          // 15
+    List&lt;String&gt; words = List.of("zebra","apple","mango","kiwi");
+    List&lt;String&gt; longWords = words.stream()
+        .filter(w -&gt; w.length() &gt;= 5)
+        .toList();
+    System.out.println(longWords); // [zebra, apple, mango]
   }
 }</code></pre>
-                    <button class="btn btn-sm btn-outline-primary" data-copy>Copy Code</button>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-st-filter">Copy Code</button>
+                        </div>
+                        <div class="console">[zebra, apple, mango]</div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-lg-5">
-                    <div class="console">APPLE, MANGO, ZEBRA
-15</div>
+                  <!-- map -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="st-map-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#st-map">map(Function&lt;? super T,? extends R&gt; mapper)</button>
+                    </h2>
+                    <div id="st-map" class="accordion-collapse collapse" data-bs-parent="#acc-stream">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">&lt;R&gt; Stream&lt;R&gt; map(Function&lt;? super T,? extends R&gt; f)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Transform elements.</li>
+                          <li><strong>Parameters:</strong> mapping function.</li>
+                          <li><strong>Returns:</strong> stream of mapped values.</li>
+                          <li><strong>Throws:</strong> if mapper throws.</li>
+                          <li><strong>Javadoc (summary):</strong> Applies a function to each element, yielding a stream of results.</li>
+                        </ul>
+<pre><code id="code-st-map" class="language-java">import java.util.*;
+import java.util.stream.*;
+public class Demo {
+  public static void main(String[] args) {
+    List&lt;String&gt; words = List.of("zebra","apple","mango");
+    List&lt;Integer&gt; lens = words.stream().map(String::length).toList();
+    System.out.println(lens); // [5, 5, 5]
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-st-map">Copy Code</button>
+                        </div>
+                        <div class="console">[5, 5, 5]</div>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                  <!-- distinct -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="st-distinct-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#st-distinct">distinct()</button>
+                    </h2>
+                    <div id="st-distinct" class="accordion-collapse collapse" data-bs-parent="#acc-stream">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">Stream&lt;T&gt; distinct()</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Remove duplicates (stable by encounter order).</li>
+                          <li><strong>Parameters:</strong> —</li>
+                          <li><strong>Returns:</strong> stream with unique elements.</li>
+                          <li><strong>Throws:</strong> —</li>
+                          <li><strong>Javadoc (summary):</strong> Returns a stream with distinct elements (per <code>equals</code>).</li>
+                        </ul>
+<pre><code id="code-st-distinct" class="language-java">import java.util.*;
+import java.util.stream.*;
+public class Demo {
+  public static void main(String[] args) {
+    List&lt;String&gt; words = List.of("apple","mango","apple","kiwi");
+    System.out.println(words.stream().distinct().toList()); // [apple, mango, kiwi]
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-st-distinct">Copy Code</button>
+                        </div>
+                        <div class="console">[apple, mango, kiwi]</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- sorted -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="st-sorted-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#st-sorted">sorted()</button>
+                    </h2>
+                    <div id="st-sorted" class="accordion-collapse collapse" data-bs-parent="#acc-stream">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">Stream&lt;T&gt; sorted()</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Natural-order sorting.</li>
+                          <li><strong>Parameters:</strong> —</li>
+                          <li><strong>Returns:</strong> sorted stream.</li>
+                          <li><strong>Throws:</strong> <code>ClassCastException</code> when not comparable.</li>
+                          <li><strong>Javadoc (summary):</strong> Returns a stream sorted by natural order.</li>
+                        </ul>
+<pre><code id="code-st-sorted" class="language-java">import java.util.*;
+import java.util.stream.*;
+public class Demo {
+  public static void main(String[] args) {
+    List&lt;String&gt; words = List.of("zebra","apple","mango");
+    System.out.println(words.stream().sorted().toList()); // [apple, mango, zebra]
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-st-sorted">Copy Code</button>
+                        </div>
+                        <div class="console">[apple, mango, zebra]</div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- collect -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="st-collect-h">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#st-collect">collect(Collector&lt;? super T, A, R&gt; collector)</button>
+                    </h2>
+                    <div id="st-collect" class="accordion-collapse collapse" data-bs-parent="#acc-stream">
+                      <div class="accordion-body">
+                        <p class="mb-2"><span class="sig">&lt;R,A&gt; R collect(Collector&lt;? super T,A,R&gt; c)</span></p>
+                        <ul class="small mb-3">
+                          <li><strong>Purpose:</strong> Terminal op to materialize results.</li>
+                          <li><strong>Parameters:</strong> collector (e.g., <code>Collectors.toList()</code>).</li>
+                          <li><strong>Returns:</strong> collected result.</li>
+                          <li><strong>Throws:</strong> if collector functions throw.</li>
+                          <li><strong>Javadoc (summary):</strong> Performs a mutable reduction operation on elements.</li>
+                        </ul>
+<pre><code id="code-st-collect" class="language-java">import java.util.*;
+import java.util.stream.*;
+public class Demo {
+  public static void main(String[] args) {
+    List&lt;String&gt; words = List.of("zebra","apple","mango");
+    String joined = words.stream()
+        .map(String::toUpperCase)
+        .sorted()
+        .collect(Collectors.joining(", "));
+    System.out.println(joined); // APPLE, MANGO, ZEBRA
+  }
+}</code></pre>
+                        <div class="d-flex gap-2 mb-2">
+                          <button class="btn btn-sm btn-outline-primary" data-copy-target="code-st-collect">Copy Code</button>
+                        </div>
+                        <div class="console">APPLE, MANGO, ZEBRA</div>
+                      </div>
+                    </div>
+                  </div>
+                </div><!-- /accordion -->
               </div>
             </div>
-          </div>
+          </div><!-- /Stream -->
 
         </div>
-      </div><!-- /java.util.stream -->
+      </div>
+      <!-- ============================= /java.util.stream ============================= -->
 
-    </div>
+    </div><!-- /tab-content -->
   </div>
 </section>
 
@@ -598,38 +982,34 @@ public class Demo {
           <div class="card-body">
             <h3 class="card-title">How to use this template</h3>
             <ol class="mb-3">
-              <li>Pick a <strong>package tab</strong>.</li>
+              <li>Choose a <strong>package tab</strong>.</li>
               <li>Open a <strong>class card</strong> and expand a method.</li>
-              <li>Click <span class="kbd">Copy Code</span> and paste into your IDE; run the snippet.</li>
-              <li>Compare with the <strong>Console Output</strong> shown.</li>
-              <li>Repeat & tweak to learn by doing.</li>
+              <li>Review <em>Purpose / Params / Returns / Throws</em> and the summary.</li>
+              <li>Copy the <span class="kbd">Code</span>, run in your IDE, compare with <strong>Console Output</strong>.</li>
             </ol>
-            <h6 class="text-secondary">ASCII view of the layout:</h6>
-<pre class="mb-0"><code>+------------------------------------------------------------+
-| Navbar + Offcanvas                                         |
-+----------------------+-------------------------------------+
-| Hero/Jumbotron       | Carousel (tips/features)            |
-+----------------------+-------------------------------------+
-| Tabs: lang | util | time | stream                          |
-+------------------------------------------------------------+
-| Tab Content:                                              |
-|  [Card: Class] --> [Accordion: method groups]             |
-|    - Code block + Copy buttons                            |
-|    - Console output + Copy output                         |
-+------------------------------------------------------------+</code></pre>
+            <h6 class="text-secondary">ASCII overview</h6>
+<pre class="mb-0"><code>Navbar
+ └─ Offcanvas Package Index
+Hero (Jumbotron + Carousel)
+Tabs: [java.lang] [java.util] [java.time] [java.util.stream]
+  └─ Card(Class)
+      └─ Accordion(5 methods):
+          • Signature / Purpose / Params / Returns / Throws
+          • Code snippet
+          • Console output</code></pre>
           </div>
         </div>
       </div>
       <div class="col-lg-4">
         <div class="card border-0 shadow-sm">
           <div class="card-body">
-            <h4 class="card-title">Tips</h4>
+            <h4 class="card-title">Pro tips</h4>
             <ul class="mb-3">
-              <li>Use <span class="kbd">List.sort</span> over <span class="kbd">Collections.sort</span> when on Java 8+.</li>
-              <li><span class="kbd">Optional</span> helps avoid null checks & signals absence.</li>
-              <li>Prefer <span class="kbd">java.time</span> types over <span class="kbd">java.util.Date</span>.</li>
+              <li>Prefer <span class="kbd">java.time</span> over <span class="kbd">Date/Calendar</span>.</li>
+              <li>Use <span class="kbd">List.sort</span> (Java 8+) for in-place ordering.</li>
+              <li><span class="kbd">Optional</span> communicates intent better than nulls.</li>
             </ul>
-            <button class="btn btn-outline-success w-100" id="addToastBtn"><i class="bi bi-megaphone me-2"></i>Show “Copied!” Toast</button>
+            <button class="btn btn-outline-success w-100" id="demoToast"><i class="bi bi-megaphone me-2"></i>Show “Copied!” Toast</button>
           </div>
         </div>
       </div>
@@ -638,58 +1018,49 @@ public class Demo {
 </section>
 
 <!-- Toast container -->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index:1080">
   <div id="toastContainer"></div>
 </div>
 
 <!-- Footer -->
 <footer class="py-4 border-top">
-  <div class="container small text-secondary">
-    <div class="d-flex flex-wrap justify-content-between">
-      <span>&copy; 2025 Java API Playground</span>
-      <span>Made with Bootstrap, Highlight.js</span>
-    </div>
+  <div class="container small text-secondary d-flex justify-content-between flex-wrap">
+    <span>&copy; 2025 Java API Playground</span>
+    <span>Bootstrap • Highlight.js</span>
   </div>
 </footer>
 
-<!-- Bootstrap JS + Highlight.js -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 <script>hljs.highlightAll();</script>
 <script>
-  // Toast helpers
-  function makeToast(message, color = 'bg-success') {
-    const id = 't' + Date.now();
+  function makeToast(message, color='bg-success') {
     const el = document.createElement('div');
     el.className = `toast align-items-center text-white ${color} border-0 mb-2`;
-    el.role = 'alert';
     el.innerHTML = `
       <div class="d-flex">
         <div class="toast-body">${message}</div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
       </div>`;
     document.getElementById('toastContainer').appendChild(el);
-    const t = new bootstrap.Toast(el, { delay: 2000 });
-    t.show();
+    new bootstrap.Toast(el, { delay: 1800 }).show();
   }
 
-  // Copy buttons
-  document.querySelectorAll('[data-copy]').forEach(btn => {
-    btn.addEventListener('click', e => {
-      const pre = btn.closest('.col-lg-7')?.querySelector('pre code');
-      const out = btn.getAttribute('data-copy')?.endsWith('-out')
-        ? document.getElementById(btn.getAttribute('data-copy'))
-        : null;
-      const source = out ? out.innerText : (pre ? pre.innerText : '');
-      if (!source) return;
-      navigator.clipboard.writeText(source).then(() => makeToast('Copied to clipboard!'));
-    });
+  // Copy buttons (targets by id)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-copy-target]');
+    if (!btn) return;
+    const id = btn.getAttribute('data-copy-target');
+    const node = document.getElementById(id);
+    if (!node) return;
+    const text = node.innerText;
+    navigator.clipboard.writeText(text).then(() => makeToast('Copied to clipboard!'));
   });
 
-  // Demo toast buttons
-  document.getElementById('addToastBtn')?.addEventListener('click', () => makeToast('This is a demo toast.'));
-  document.getElementById('toastWelcomeBtn')?.addEventListener('click', () => makeToast('Welcome! Explore tabs to start.', 'bg-primary'));
-  document.getElementById('showTips')?.addEventListener('click', () => makeToast('Tip: Expand accordions to see examples.', 'bg-warning'));
+  document.getElementById('demoToast')?.addEventListener('click', () => makeToast('This is a demo toast.'));
+  document.getElementById('welcomeTip')?.addEventListener('click', () => makeToast('Open a package tab and expand methods.', 'bg-primary'));
+  document.getElementById('tipsBtn')?.addEventListener('click', () => makeToast('Each method includes Purpose, Params, Returns, Throws.', 'bg-warning'));
 </script>
 </body>
 </html>
