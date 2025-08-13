@@ -15,6 +15,10 @@ UI is Bootstrap‑based; code is highlighted via **self‑hosted Highlight.js**.
   - [Open directly](#open-directly)
   - [Docker (Nginx)](#docker-nginx)
   - [Docker Compose](#docker-compose)
+- [Setup Highlight.js Locally (One‑time)](#setup-highlightjs-locally-one-time)
+  - [Script: scripts/setup-highlightjs.sh](#script-scriptsssetup-highlightjssh)
+  - [Make Executable & Run](#make-executable--run)
+  - [Local vs CDN in index.html](#local-vs-cdn-in-indexhtml)
 - [Using the UI](#using-the-ui)
   - [Tabs & Cards](#tabs--cards)
   - [Method Entries](#method-entries)
@@ -26,11 +30,9 @@ UI is Bootstrap‑based; code is highlighted via **self‑hosted Highlight.js**.
   - [java.util.stream](#javautilstream)
   - [java.util.regex](#javautilregex)
 - [Extending the Content](#extending-the-content)
-- [Self‑hosting Highlight.js](#selfhosting-highlightjs)
-- [Diagrams (PlantUML)](#diagrams-plantuml)
+- [Diagrams (PlantUML / ASCII)](#diagrams-plantuml--ascii)
 - [FAQ](#faq)
 - [License](#license)
-- [Appendix: scripts/setup-highlightjs.sh](#appendix-scriptsssetup-highlightjssh)
 
 ---
 
@@ -51,7 +53,7 @@ UI is Bootstrap‑based; code is highlighted via **self‑hosted Highlight.js**.
   - **Copy Code / Copy Output** buttons with toasts
   - **Search box** to filter methods in the current tab
 - **Dockerized static server** (Nginx) for `http://localhost:9999`
-- **This README** with PlantUML diagrams and instructions
+- **This README** with PlantUML/ASCII diagrams and instructions
 - **A setup script** to fetch Highlight.js assets locally
 
 ---
@@ -77,34 +79,126 @@ UI is Bootstrap‑based; code is highlighted via **self‑hosted Highlight.js**.
    └─ setup-highlightjs.sh
 ```
 
-Tip: If you don’t have the `assets/highlightjs` folder yet, run the setup script in the appendix.
+Tip: If you don’t have the `assets/highlightjs` folder yet, run the setup script below.
 
 ---
 
 ## Quick Start
 
 ### Open directly
+
 Open `index.html` in your browser. (For reliable CSS reloads, prefer Docker or any local static server.)
 
 ### Docker (Nginx)
-1) Build the image: `docker build -t java-api-lbd ./docker`  
-2) Run (mount project root read‑only): `docker run --rm -p 9999:80 -v "$PWD":/usr/share/nginx/html:ro java-api-lbd`  
-3) Open: `http://localhost:9999`
+
+```
+1) Build the image:  
+   docker build -t java-api-lbd ./docker  
+2) Run (mount project root read‑only):  
+   docker run --rm -p 9999:80 -v "$PWD":/usr/share/nginx/html:ro java-api-lbd  
+3) Open:  
+   http://localhost:9999
+```
 
 ### Docker Compose
-1) Start: `docker compose up --build`  
-2) Open: `http://localhost:9999`
+
+```
+1) Start:  
+   docker compose up --build  
+2) Open:  
+   http://localhost:9999
+```
+---
+
+## Setup Highlight.js Locally (One‑time)
+
+Run a tiny script that fetches a pinned Highlight.js version + two themes (dark/light) into `assets/highlightjs/`.
+
+### Script: scripts/setup-highlightjs.sh
+
+Save this file at `scripts/setup-highlightjs.sh`:
+
+```sh
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Pinned Highlight.js version for reproducible builds
+    HL_VERSION="11.9.0"
+
+    # Resolve project root (script may be called from anywhere)
+    ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+    ASSET_DIR="$ROOT_DIR/assets/highlightjs"
+    STYLE_DIR="$ASSET_DIR/styles"
+
+    mkdir -p "$STYLE_DIR"
+
+    echo "Downloading Highlight.js v$HL_VERSION into $ASSET_DIR ..."
+
+    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/highlight.min.js" \
+      -o "$ASSET_DIR/highlight.min.js"
+
+    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/styles/github-dark.min.css" \
+      -o "$STYLE_DIR/github-dark.min.css"
+
+    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/styles/github.min.css" \
+      -o "$STYLE_DIR/github.min.css"
+
+    echo "OK. Files downloaded:"
+    echo "  - $ASSET_DIR/highlight.min.js"
+    echo "  - $STYLE_DIR/github-dark.min.css"
+    echo "  - $STYLE_DIR/github.min.css"
+    echo
+    echo "Next steps:"
+    echo "  1) In index.html <head>:"
+    echo "       <link id=\"hljs-theme\" rel=\"stylesheet\" href=\"assets/highlightjs/styles/github-dark.min.css\">"
+    echo "  2) At end of <body>:"
+    echo "       <script src=\"assets/highlightjs/highlight.min.js\"></script>"
+    echo "       <script>hljs.highlightAll();</script>"
+    echo
+    echo "Done."
+```
+
+### Make Executable & Run
+
+From the project root:
+
+```
+    chmod +x scripts/setup-highlightjs.sh
+    bash scripts/setup-highlightjs.sh
+```
+
+This will create:
+
+```
+- assets/highlightjs/highlight.min.js  
+- assets/highlightjs/styles/github-dark.min.css  
+- assets/highlightjs/styles/github.min.css
+```
+
+### Local vs CDN in index.html
+
+Use **local** (recommended, offline‑friendly):
+
+- In `<head>` (single link):  
+  <link id="hljs-theme" rel="stylesheet" href="assets/highlightjs/styles/github-dark.min.css">
+- At end of `<body>` (init):  
+  <script src="assets/highlightjs/highlight.min.js"></script>  
+  <script>hljs.highlightAll();</script>
+
+If you prefer **CDN** instead, swap the link/script to cdnjs versions. Keep only **one** stylesheet link at a time.
 
 ---
 
 ## Using the UI
 
 ### Tabs & Cards
+
 - Tabs represent **packages** (e.g., `java.util`).
 - Inside each tab, each **card** represents a **class/interface** (e.g., `HashSet`).
 - Expand the accordion items to see **methods**.
 
 ### Method Entries
+
 Each method shows:
 - **Signature** (monospace line)
 - **Purpose / Parameters / Returns / Throws** (bulleted)
@@ -113,6 +207,7 @@ Each method shows:
 - **Expected console output** (copyable)
 
 ### Search Box
+
 - Large **Search** input near the top of the page.
 - Filters **methods within the active tab** only (keeps context clean).
 - Matches are **highlighted**; non‑matches are hidden (methods and whole cards if no method matches).
@@ -275,35 +370,9 @@ Each method shows:
 
 ---
 
-## Self‑hosting Highlight.js  {#selfhosting-highlightjs}
+## Diagrams (PlantUML / ASCII)
 
-To run **fully offline** with local assets:
-
-A) Ensure you have the script from the appendix saved as `scripts/setup-highlightjs.sh`, then run:  
-`bash scripts/setup-highlightjs.sh`
-
-This will:
-- Create `assets/highlightjs/` (if missing)
-- Download a pinned Highlight.js version and two themes (dark/light)
-- Save files at:
-  - `assets/highlightjs/highlight.min.js`
-  - `assets/highlightjs/styles/github-dark.min.css`
-  - `assets/highlightjs/styles/github.min.css`
-
-B) In `index.html` (single, local link):
-- In `<head>`:  
-  `<link id="hljs-theme" rel="stylesheet" href="assets/highlightjs/styles/github-dark.min.css">`
-- At end of `<body>`:  
-  `<script src="assets/highlightjs/highlight.min.js"></script>`  
-  `<script>hljs.highlightAll();</script>`
-
-Tip: To switch themes, manually swap the `href` of `#hljs-theme`. Keeping one default is simplest.
-
----
-
-## Diagrams (PlantUML)  {#diagrams-plantuml}
-
-Component (paste into PlantUML renderer):
+Component diagram (paste into PlantUML renderer):
 
 ```PlantUML
 @startuml  
@@ -336,6 +405,24 @@ Clipboard --> UI : Promise resolved
 UI -> UI : showToast("Copied!")  
 @enduml
 ```
+
+## ASCII UI layout:
+
+```
++-------------------------------------------------------------+  
+| Navbar + Offcanvas Package Index                            |  
++-----------------------+-------------------------------------+  
+| Hero (Jumbotron)      | Carousel                            |  
++-----------------------+-------------------------------------+  
+| Tabs: [java.lang] [java.util] [java.time] [streams] [regex] |  
++-------------------------------------------------------------+  
+| Card(Class) → Accordion(Methods)                            |  
+|   • Signature / Purpose / Params / Returns / Throws         |  
+|   • Javadoc summary                                         |  
+|   • Code snippet + Copy buttons                             |  
+|   • Console output + Copy                                   |  
++-------------------------------------------------------------+
+```
 ---
 
 ## FAQ
@@ -357,52 +444,3 @@ Add a new **tab** panel in the HTML, copy card patterns inside it, and wire the 
 ## License
 
 MIT
-
----
-
-## Appendix: scripts/setup-highlightjs.sh
-
-Save the following as `scripts/setup-highlightjs.sh`, then run:  
-`bash scripts/setup-highlightjs.sh`
-
-(If you are on Windows, run it in Git Bash or WSL.)
-
-```sh
-    #!/usr/bin/env bash
-    set -euo pipefail
-
-    # Pinned Highlight.js version for reproducible builds
-    HL_VERSION="11.9.0"
-
-    # Resolve project root (script may be called from anywhere)
-    ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-    ASSET_DIR="$ROOT_DIR/assets/highlightjs"
-    STYLE_DIR="$ASSET_DIR/styles"
-
-    mkdir -p "$STYLE_DIR"
-
-    echo "Downloading Highlight.js v$HL_VERSION into $ASSET_DIR ..."
-
-    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/highlight.min.js" \
-      -o "$ASSET_DIR/highlight.min.js"
-
-    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/styles/github-dark.min.css" \
-      -o "$STYLE_DIR/github-dark.min.css"
-
-    curl -fL "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${HL_VERSION}/styles/github.min.css" \
-      -o "$STYLE_DIR/github.min.css"
-
-    echo "OK. Files downloaded:"
-    echo "  - $ASSET_DIR/highlight.min.js"
-    echo "  - $STYLE_DIR/github-dark.min.css"
-    echo "  - $STYLE_DIR/github.min.css"
-    echo
-    echo "Next steps:"
-    echo "  1) In index.html <head>:"
-    echo "       <link id=\"hljs-theme\" rel=\"stylesheet\" href=\"assets/highlightjs/styles/github-dark.min.css\">"
-    echo "  2) At end of <body>:"
-    echo "       <script src=\"assets/highlightjs/highlight.min.js\"></script>"
-    echo "       <script>hljs.highlightAll();</script>"
-    echo
-    echo "Done."
-```
