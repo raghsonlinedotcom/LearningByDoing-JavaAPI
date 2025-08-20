@@ -12,14 +12,48 @@
     h2 { border-bottom: 2px solid #eee; padding-bottom: 0.3rem; margin-top: 2rem; }
     .question { font-weight: bold; color: #0d6efd; margin-top: 1rem; }
     .takeaway { background: #e2f0d9; padding: 0.5rem 1rem; border-left: 4px solid #198754; margin-top: 1rem; }
+    .sidebar {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      bottom: 0;
+      width: 260px;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      overflow-y: auto;
+      border-right: 1px solid #ddd;
+    }
+    .main-content {
+      margin-left: 280px;
+      padding: 2rem 1rem;
+    }
+    .search-box {
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1 class="mt-4 mb-3 text-primary">📘 Java JPMS – A Complete Modular Journey</h1>
+<div class="sidebar">
+  <h5 class="text-primary">📚 JPMS Tutorial</h5>
+  <input type="text" class="form-control search-box" placeholder="🔍 Search…" oninput="filterSections(this.value)">
+  <nav id="nav-sections" class="nav flex-column">
+    <a class="nav-link" href="#sec1">1. Why Modules</a>
+    <a class="nav-link" href="#sec2">2. What Is a Module?</a>
+    <a class="nav-link" href="#sec3">3. Real-World Example</a>
+    <a class="nav-link" href="#sec4">4. Compile & Run</a>
+    <a class="nav-link" href="#sec5">5. ServiceLoader</a>
+    <a class="nav-link" href="#sec6">6. Pitfalls</a>
+    <a class="nav-link" href="#sec7">7. When to Use</a>
+    <a class="nav-link" href="#sec8">8. Summary Table</a>
+    <a class="nav-link" href="#sec9">9. Sample Output</a>
+  </nav>
+</div>
 
-  <section>
+<div class="main-content">
+  <h1 class="mb-3 text-primary">📘 Java JPMS – A Complete Modular Journey</h1>
+
+  <section id="sec1">
     <h2>1. ❓ Why Were Modules Introduced in Java?</h2>
     <p class="question">What problems did Java have before Java 9?</p>
     <ul>
@@ -38,7 +72,7 @@
     </div>
   </section>
 
-  <section>
+  <section id="sec2">
     <h2>2. 📦 What Is a Java Module?</h2>
     <p>A Java module is a named group of packages with a <code>module-info.java</code> descriptor file that explicitly declares:</p>
     <ul>
@@ -47,117 +81,62 @@
       <li>What it <code>opens</code> (reflection)</li>
       <li>What it <code>provides</code> and <code>uses</code> (services)</li>
     </ul>
-
     <p class="question">How do you define a module?</p>
     <pre><code>module com.myapp.billing {
   requires com.myapp.core;
   exports com.myapp.billing;
 }</code></pre>
-
     <div class="takeaway">
       <strong>Takeaway:</strong> A module isn't just a folder — it’s a declaration of boundaries and contracts.
     </div>
   </section>
 
-  <section>
+  <section id="sec3">
     <h2>3. 🧠 Real-World Project Example – Modular Invoice System</h2>
-
-    <p class="question">What does a modular architecture look like?</p>
     <pre><code>invoice-app/
 ├── invoice.core/       # Domain (Invoice.java)
 ├── invoice.db/         # DAO (InvoiceRepository.java)
 ├── invoice.service/    # Business Logic
 └── invoice.cli/        # Main Application Entry</code></pre>
-
-    <p class="question">What do module descriptors look like?</p>
-
-    <p><strong>invoice.core:</strong></p>
-    <pre><code>module invoice.core {
-  exports com.invoice.core;
-}</code></pre>
-
-    <p><strong>invoice.db:</strong></p>
-    <pre><code>module invoice.db {
-  requires invoice.core;
-  exports com.invoice.db;
-}</code></pre>
-
-    <p><strong>invoice.service:</strong></p>
-    <pre><code>module invoice.service {
-  requires invoice.core;
-  requires invoice.db;
-  exports com.invoice.service;
-}</code></pre>
-
-    <p><strong>invoice.cli:</strong></p>
-    <pre><code>module invoice.cli {
-  requires invoice.service;
-}</code></pre>
-
-    <div class="takeaway">
-      <strong>Takeaway:</strong> Each module builds on others in a downward chain. Higher modules use lower ones.
-    </div>
+    <p>Each module's <code>module-info.java</code> defines its exposure and dependencies.</p>
   </section>
 
-  <section>
+  <section id="sec4">
     <h2>4. 🧪 Compiling and Running JPMS Projects</h2>
-    <p class="question">How do you compile and run a modular app?</p>
     <pre><code>javac --module-source-path . -d out $(find . -name "*.java")
 java --module-path out -m invoice.cli/com.invoice.cli.App</code></pre>
-    <p>Use <code>--module-source-path</code> for structured builds and <code>--module-path</code> to run.</p>
   </section>
 
-  <section>
+  <section id="sec5">
     <h2>5. 🔌 Using ServiceLoader – Plugin System</h2>
-    <p class="question">How does JPMS support dynamic plugins?</p>
-    <pre><code>// plugin.api
-module plugin.api {
+    <pre><code>module plugin.api {
   exports com.plugin.api;
 }
-
-// plugin.impl
 module plugin.impl {
   requires plugin.api;
   provides com.plugin.api.TaskPlugin with com.plugin.impl.MyPlugin;
 }</code></pre>
-
-    <p><strong>Usage:</strong></p>
+    <p><strong>Consumer:</strong></p>
     <pre><code>ServiceLoader&lt;TaskPlugin&gt; loader = ServiceLoader.load(TaskPlugin.class);
 loader.forEach(TaskPlugin::run);</code></pre>
-
-    <div class="takeaway">
-      <strong>Takeaway:</strong> This makes JPMS ideal for frameworks and IDEs where plug-and-play modules are common.
-    </div>
   </section>
 
-  <section>
+  <section id="sec6">
     <h2>6. ⚠️ Common Pitfalls</h2>
     <ul>
-      <li>🔒 Forgetting <code>exports</code> causes <code>module not readable</code> errors</li>
-      <li>🔎 Using reflection (e.g. Jackson) without <code>opens</code> causes <code>InaccessibleObjectException</code></li>
-      <li>🔁 Circular module dependencies are not allowed</li>
-      <li>🌀 Automatic/unnamed modules can behave unpredictably</li>
+      <li>Forget to <code>exports</code> → access denied</li>
+      <li>Use reflection but forget <code>opens</code></li>
+      <li>Automatic modules = unstable behavior</li>
     </ul>
   </section>
 
-  <section>
+  <section id="sec7">
     <h2>7. ✅ When to Use JPMS (and When Not To)</h2>
-    <p><strong>Use JPMS when:</strong></p>
-    <ul>
-      <li>Large enterprise apps with multiple layers</li>
-      <li>Public SDKs that should hide internals</li>
-      <li>Plugin architectures or microservices</li>
-    </ul>
-
-    <p><strong>Avoid JPMS when:</strong></p>
-    <ul>
-      <li>Using Spring Boot unless you know how to open modules</li>
-      <li>Building simple CLI tools or scripts</li>
-      <li>Working with legacy classpath-only libraries</li>
-    </ul>
+    <p><strong>Use JPMS:</strong> Large apps, public APIs, plugin-based designs.</p>
+    <p><strong>Avoid JPMS:</strong> Simple scripts, Spring Boot unless advanced usage.</p>
   </section>
 
-  <section>
+  <section id="sec8">
     <h2>8. 🧭 JPMS Summary Table</h2>
     <table class="table table-bordered">
       <thead><tr><th>Keyword</th><th>Description</th></tr></thead>
@@ -172,13 +151,22 @@ loader.forEach(TaskPlugin::run);</code></pre>
     </table>
   </section>
 
-  <section>
+  <section id="sec9">
     <h2>9. 🖥 Sample Output</h2>
     <pre><code>📚 Welcome to the Modular Invoice System!
 Invoice #1001 - ₹12,500
 Invoice #1002 - ₹8,400</code></pre>
   </section>
 </div>
+
+<script>
+function filterSections(query) {
+  query = query.toLowerCase();
+  document.querySelectorAll('.main-content section').forEach(sec => {
+    sec.style.display = sec.innerText.toLowerCase().includes(query) ? 'block' : 'none';
+  });
+}
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
