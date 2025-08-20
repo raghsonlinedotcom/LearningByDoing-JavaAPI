@@ -1,52 +1,97 @@
-<!-- Version: index-original-enhanced.html -->
-<!-- Changelog: Initial clean accordion version with 3 sections -->
-<!-- Use version switcher to toggle between enhanced and upgraded versions -->
-
-<!-- BEGIN SWITCHER -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">JPMS Tutorial</a>
-    <select class="form-select w-auto" onchange="location = this.value;">
-      <option selected>Switch Version</option>
-      <option value="index-original-enhanced.html">Original Enhanced</option>
-      <option value="index-final-upgraded.html">Final Upgraded</option>
-    </select>
-  </div>
-</nav>
-<!-- END SWITCHER -->
-
-<!DOCTYPE html>\n<html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Java Modules (JPMS) Tutorial</title>
+  <title>Java Modules (JPMS) - Full Tutorial</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { padding: 2rem; }
-    pre { background-color: #f8f9fa; padding: 1rem; border-radius: 5px; }
-    code { color: #d63384; }
-    .accordion-button::after { float: right; }
+    body {
+      padding-top: 4rem;
+    }
+    .sidebar {
+      position: fixed;
+      top: 4rem;
+      left: 0;
+      height: 100%;
+      width: 250px;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      overflow-y: auto;
+      border-right: 1px solid #ddd;
+    }
+    .content {
+      margin-left: 270px;
+      padding: 2rem;
+    }
+    pre {
+      background-color: #f1f1f1;
+      padding: 1rem;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="mb-4 text-primary">Java Platform Module System (JPMS) Tutorial</h1>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">JPMS Tutorial</a>
+    </div>
+  </nav>
 
-    <div class="accordion" id="jpmsAccordion">
+  <div class="sidebar">
+    <h6>📚 Sections</h6>
+    <ul class="nav flex-column">
+      <li><a href="#intro" class="nav-link">Introduction</a></li>
+      <li><a href="#why" class="nav-link">Why JPMS?</a></li>
+      <li><a href="#how" class="nav-link">How to Create Modules</a></li>
+      <li><a href="#realworld" class="nav-link">Real-World Examples</a></li>
+      <li><a href="#diagrams" class="nav-link">Diagrams</a></li>
+      <li><a href="#cli" class="nav-link">CLI & Compilation</a></li>
+      <li><a href="#pitfalls" class="nav-link">Common Pitfalls</a></li>
+      <li><a href="#summary" class="nav-link">Summary</a></li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <h1 id="intro">📘 Introduction to JPMS</h1>
+    <p>JPMS (Java Platform Module System) was introduced in Java 9 to improve modularity, encapsulation, and maintainability of Java applications. It allows splitting large monolithic codebases into manageable <strong>modules</strong>.</p>
+
+    <h2 id="why">❓ Why Use Modules?</h2>
+    <ul>
+      <li>Encapsulation of internal APIs</li>
+      <li>Faster startup and better performance</li>
+      <li>Explicit dependencies using <code>requires</code></li>
+      <li>Clear separation of concerns</li>
+      <li>Enables strong encapsulation via <code>exports</code></li>
+    </ul>
+
+    <h2 id="how">⚙️ How to Create Modules</h2>
+    <p>Each module requires a <code>module-info.java</code> descriptor:</p>
+    <pre><code>module com.invoice.service {
+  requires com.invoice.model;
+  exports com.invoice.service;
+}</code></pre>
+    <p><strong>Key keywords:</strong> <code>requires</code>, <code>exports</code>, <code>opens</code>, <code>uses</code>, <code>provides ... with</code></p>
+
+    <h2 id="realworld">🏢 Real-World Examples (Accordion)</h2>
+    <div class="accordion" id="examplesAccordion">
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-            1. Why JPMS?
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+            📦 Example 1: Invoice Management System
           </button>
         </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#jpmsAccordion">
+        <div id="collapseOne" class="accordion-collapse collapse show">
           <div class="accordion-body">
-            <p>JPMS was introduced in Java 9 to solve the "JAR Hell" problem by:</p>
             <ul>
-              <li>Enabling strong encapsulation</li>
-              <li>Improving maintainability and tooling</li>
-              <li>Allowing explicit module dependencies</li>
+              <li><code>com.invoice.model</code> — POJOs, Domain Objects</li>
+              <li><code>com.invoice.service</code> — Business logic</li>
+              <li><code>com.invoice.api</code> — REST layer, public API</li>
+              <li><code>com.invoice.db</code> — Persistence layer</li>
             </ul>
+            <pre><code>module com.invoice.db {
+  requires java.sql;
+  exports com.invoice.db;
+}</code></pre>
           </div>
         </div>
       </div>
@@ -54,40 +99,55 @@
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingTwo">
           <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-            2. What is a Module?
+            📦 Example 2: HR Management System
           </button>
         </h2>
-        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#jpmsAccordion">
+        <div id="collapseTwo" class="accordion-collapse collapse">
           <div class="accordion-body">
-            <p>A module is a self-contained unit of code with a <code>module-info.java</code> descriptor that defines its exports and dependencies.</p>
-            <pre><code>module com.invoice.core {
-  exports com.invoice.model;
-}</code></pre>
+            Modules like <code>com.hr.core</code>, <code>com.hr.auth</code>, <code>com.hr.payroll</code> help encapsulate payroll and auth independently.
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingThree">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
-            3. Real-World Example
-          </button>
-        </h2>
-        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#jpmsAccordion">
-          <div class="accordion-body">
-            <p>Imagine a modular invoice system with three modules:</p>
-            <ul>
-              <li><code>com.invoice.model</code> — contains domain classes</li>
-              <li><code>com.invoice.service</code> — business logic</li>
-              <li><code>com.invoice.app</code> — CLI or Web entry point</li>
-            </ul>
-          </div>
-        </div>
-      </div>
+    <h2 id="diagrams">📊 Diagrams (PlantUML)</h2>
+    <pre>@startuml
+skinparam componentStyle rectangle
 
+component [API Module] as A
+component [Model Module] as M
+component [Service Module] as S
+component [DB Module] as D
+
+A --> S
+S --> M
+S --> D
+@enduml</pre>
+
+    <h2 id="cli">💻 CLI & Compilation</h2>
+    <pre><code>javac -d out --module-source-path src $(find src -name "*.java")
+java --module-path out -m com.invoice.api/com.invoice.api.Main</code></pre>
+
+    <h2 id="pitfalls">⚠️ Common Pitfalls</h2>
+    <ul>
+      <li>Forgetting <code>exports</code> leads to IllegalAccessError</li>
+      <li>Mixing automatic modules (from JARs) and explicit modules can confuse the resolver</li>
+      <li>Third-party libs without <code>module-info</code> may need <code>--add-exports</code> or unnamed module hacks</li>
+    </ul>
+
+    <h2 id="summary">✅ Summary</h2>
+    <ul>
+      <li>Modules = clear contracts between packages</li>
+      <li>Boosts maintainability, readability, and security</li>
+      <li>Start small — modularize new features first</li>
+    </ul>
+
+    <div class="alert alert-success mt-4" role="alert">
+      🎉 You're now ready to build your first Java Modular App with confidence!
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
