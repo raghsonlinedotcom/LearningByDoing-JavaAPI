@@ -26,8 +26,11 @@
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="#intro">Introduction</a></li>
         <li class="nav-item"><a class="nav-link" href="#why">Why</a></li>
+        <li class="nav-item"><a class="nav-link" href="#walkthrough">Project Walkthrough</a></li>
+        <li class="nav-item"><a class="nav-link" href="#diagram">Diagram</a></li>
         <li class="nav-item"><a class="nav-link" href="#keywords">Keywords</a></li>
         <li class="nav-item"><a class="nav-link" href="#compile">How to Run</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pitfalls">Pitfalls</a></li>
         <li class="nav-item"><a class="nav-link" href="#usecases">Use Cases</a></li>
       </ul>
     </div>
@@ -58,7 +61,99 @@
   <p>JPMS solves <strong>classpath hell</strong> and enables large-scale Java application structuring.</p>
 </section>
 
-<!-- JPMS Keywords -->
+<!-- Project Walkthrough -->
+<section id="walkthrough" class="container mb-5">
+  <h2>🔍 Project Walkthrough – Modular Layers</h2>
+  <div class="accordion" id="modulesAccordion">
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="coreHead">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#coreBody" aria-expanded="true">
+          📦 lib.core – Domain Layer
+        </button>
+      </h2>
+      <div id="coreBody" class="accordion-collapse collapse show">
+        <div class="accordion-body">
+          <p>Contains domain classes like <code>Book</code>. It is exported for use by other modules.</p>
+          <pre><code>module lib.core {
+  exports com.lib.core;
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="daoHead">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#daoBody">
+          🗄️ lib.dao – Data Access Layer
+        </button>
+      </h2>
+      <div id="daoBody" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <p>Accesses and returns data. Depends on <code>lib.core</code>.</p>
+          <pre><code>module lib.dao {
+  requires lib.core;
+  exports com.lib.dao;
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="serviceHead">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#serviceBody">
+          ⚙️ lib.service – Business Logic
+        </button>
+      </h2>
+      <div id="serviceBody" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <p>Combines data access and processing. Depends on <code>lib.dao</code> and <code>lib.core</code>.</p>
+          <pre><code>module lib.service {
+  requires lib.core;
+  requires lib.dao;
+  exports com.lib.service;
+}</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="uiHead">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#uiBody">
+          🖥️ lib.ui – Application Entry Point
+        </button>
+      </h2>
+      <div id="uiBody" class="accordion-collapse collapse">
+        <div class="accordion-body">
+          <p>Depends on <code>lib.service</code>. Contains <code>LibraryApp</code> main class.</p>
+          <pre><code>module lib.ui {
+  requires lib.service;
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Diagram -->
+<section id="diagram" class="container mb-5">
+  <h2>📊 JPMS Dependency Graph</h2>
+  <pre><code>
+[java.base]
+     ↓
+[lib.core]
+     ↓
+[lib.dao]
+     ↓
+[lib.service]
+     ↓
+[lib.ui]
+  </code></pre>
+  <p class="mt-3">You can also visualize it using PlantUML:</p>
+  <img src="https://www.plantuml.com/plantuml/png/SoWkIImgAStDuU9oICtEp4ZCoKnELT3AJIv9pSd91Yx9pSd91Kf8pSd91vKhICt9B2h9oSk49Ke0" alt="Module Graph" class="img-fluid rounded border">
+</section>
+
+<!-- Keywords -->
 <section id="keywords" class="container mb-5">
   <h2>🪄 JPMS Keywords Explained</h2>
   <table class="table table-bordered">
@@ -82,6 +177,18 @@
   <pre><code>javac --module-source-path . -d out $(find . -name "*.java")
 java --module-path out -m lib.ui/com.lib.ui.LibraryApp</code></pre>
   <p>Ensure all modules are defined with a <code>module-info.java</code> file at the root.</p>
+</section>
+
+<!-- Pitfalls -->
+<section id="pitfalls" class="container mb-5">
+  <h2>⚠️ Common Pitfalls</h2>
+  <ul>
+    <li>❌ Forgetting to <code>exports</code> a package causes <code>package is not visible</code> errors.</li>
+    <li>❌ Using <code>reflective frameworks</code> without <code>opens</code> results in <code>InaccessibleObjectException</code>.</li>
+    <li>⚠️ <strong>ServiceLoader</strong> won't work without <code>provides</code> and <code>uses</code> being correctly declared.</li>
+    <li>❌ Circular module dependencies are not allowed.</li>
+    <li>⚠️ Modules may need to open packages explicitly to testing frameworks.</li>
+  </ul>
 </section>
 
 <!-- Use Cases -->
