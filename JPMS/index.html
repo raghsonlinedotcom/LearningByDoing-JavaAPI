@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java JPMS Modular Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding-top: 60px; }
+    pre { background-color: #f8f9fa; padding: 1rem; border-radius: 5px; }
+    .nav-tabs .nav-link.active { background-color: #e9ecef; }
+    .toast-container { position: fixed; bottom: 1rem; right: 1rem; }
+  </style>
+</head>
+<body>
+
+<!-- ✅ Jumbotron -->
+<div class="container">
+  <div class="p-5 mb-4 bg-light rounded-3 shadow">
+    <div class="container-fluid py-3">
+      <h1 class="display-5 fw-bold">📚 Java JPMS Modular Demo</h1>
+      <p class="col-md-10 fs-5">A fully modular Library Management System using Java 17 and JPMS.</p>
+      <hr>
+      <p>Modules: <strong>lib.core, lib.dao, lib.service, lib.ui</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Tabs -->
+<div class="container mb-4">
+  <ul class="nav nav-tabs" id="moduleTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="core-tab" data-bs-toggle="tab" data-bs-target="#core" type="button" role="tab">lib.core</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="dao-tab" data-bs-toggle="tab" data-bs-target="#dao" type="button" role="tab">lib.dao</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="service-tab" data-bs-toggle="tab" data-bs-target="#service" type="button" role="tab">lib.service</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="ui-tab" data-bs-toggle="tab" data-bs-target="#ui" type="button" role="tab">lib.ui</button>
+    </li>
+  </ul>
+  <div class="tab-content p-3 border border-top-0 bg-white" id="moduleTabsContent">
+    
+    <!-- lib.core -->
+    <div class="tab-pane fade show active" id="core" role="tabpanel">
+      <h5>module-info.java</h5>
+      <pre><code>module lib.core {
+    exports com.lib.core;
+}</code></pre>
+
+      <h5>Book.java</h5>
+      <pre><code>package com.lib.core;
+
+public class Book {
+    private final String title;
+    private final String author;
+
+    public Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+
+    public String getTitle() { return title; }
+    public String getAuthor() { return author; }
+
+    @Override
+    public String toString() {
+        return title + " by " + author;
+    }
+}</code></pre>
+    </div>
+
+    <!-- lib.dao -->
+    <div class="tab-pane fade" id="dao" role="tabpanel">
+      <h5>module-info.java</h5>
+      <pre><code>module lib.dao {
+    requires lib.core;
+    exports com.lib.dao;
+}</code></pre>
+
+      <h5>BookRepository.java</h5>
+      <pre><code>package com.lib.dao;
+
+import com.lib.core.Book;
+import java.util.List;
+
+public class BookRepository {
+    public List&lt;Book&gt; findAllBooks() {
+        return List.of(
+            new Book("Clean Code", "Robert C. Martin"),
+            new Book("Effective Java", "Joshua Bloch")
+        );
+    }
+}</code></pre>
+    </div>
+
+    <!-- lib.service -->
+    <div class="tab-pane fade" id="service" role="tabpanel">
+      <h5>module-info.java</h5>
+      <pre><code>module lib.service {
+    requires lib.core;
+    requires lib.dao;
+    exports com.lib.service;
+}</code></pre>
+
+      <h5>LibraryService.java</h5>
+      <pre><code>package com.lib.service;
+
+import com.lib.core.Book;
+import com.lib.dao.BookRepository;
+import java.util.List;
+
+public class LibraryService {
+    private final BookRepository repo = new BookRepository();
+
+    public void displayBooks() {
+        List&lt;Book&gt; books = repo.findAllBooks();
+        books.forEach(System.out::println);
+    }
+}</code></pre>
+    </div>
+
+    <!-- lib.ui -->
+    <div class="tab-pane fade" id="ui" role="tabpanel">
+      <h5>module-info.java</h5>
+      <pre><code>module lib.ui {
+    requires lib.service;
+}</code></pre>
+
+      <h5>LibraryApp.java</h5>
+      <pre><code>package com.lib.ui;
+
+import com.lib.service.LibraryService;
+
+public class LibraryApp {
+    public static void main(String[] args) {
+        System.out.println("📚 Welcome to the Modular Library!");
+        LibraryService service = new LibraryService();
+        service.displayBooks();
+    }
+}</code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Module Graph -->
+<div class="container mb-5">
+  <div class="card shadow">
+    <div class="card-header">📊 Module Dependency Graph</div>
+    <div class="card-body">
+      <pre><code>
+[java.base]
+     ↓
+[lib.core]
+     ↓
+[lib.dao]
+     ↓
+[lib.service]
+     ↓
+[lib.ui]
+      </code></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Sample Output Toast -->
+<div class="toast-container">
+  <div class="toast show align-items-center text-bg-success border-0" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Output: <br />
+        📚 Welcome to the Modular Library!<br />
+        Clean Code by Robert C. Martin<br />
+        Effective Java by Joshua Bloch
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

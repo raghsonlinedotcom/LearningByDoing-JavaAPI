@@ -24,6 +24,10 @@
             .sig { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace }
             .badge-pkg { font-family: ui-monospace, monospace }
         </style>
+        <style>
+          mark.search-hit { padding: .05em .15em; border-radius: .2rem; }
+          .search-hide { display: none !important; }
+        </style>
     </head>
     <body>
         <!-- Navbar -->
@@ -95,6 +99,15 @@
                             <button class="carousel-control-next" type="button" data-bs-target="#featureCarousel" data-bs-slide="next">
                             <span class="carousel-control-next-icon"></span>
                             </button>
+                            <!-- Global Search -->
+                            <div class="mt-3">
+                              <div class="input-group input-group-lg">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input id="methodSearch" class="form-control" type="search" placeholder="Search methods in this tab (e.g., split, merge, Instant.atZone)">
+                                <button class="btn btn-outline-secondary" type="button" id="clearSearch" title="Clear"><i class="bi bi-x-lg"></i></button>
+                              </div>
+                              <div class="small text-secondary mt-2"><span id="searchCount">Type to filter methods…</span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1922,5 +1935,108 @@ Tabs: [java.lang] [java.util] [java.time] [java.util.stream]
               console.debug('[HLJS] using', link.href);
             })();
         </script>
+        <script>
+        (function() {
+          // Utility: debouncer
+          const debounce = (fn, ms=150) => { let t; return (...a) => { clearTimeout(t); t=setTimeout(() => fn(...a), ms); }; };
+
+          // Elements
+          const q = document.getElementById('methodSearch');
+          const clr = document.getElementById('clearSearch');
+          const count = document.getElementById('searchCount');
+          if (!q || !clr || !count) return;
+
+          // Each "method entry" is an .accordion-item.
+          // We'll search within the CURRENTLY ACTIVE TAB only, so results stay contextual.
+          function getActiveTabPane(){
+            return document.querySelector('.tab-pane.active.show') || document.querySelector('.tab-pane.active');
+          }
+
+          // Remove previous highlights
+          function unmark(node) {
+            node.querySelectorAll('mark.search-hit').forEach(m => {
+              const t = document.createTextNode(m.textContent);
+              m.replaceWith(t);
+            });
+          }
+
+          // Highlight matches inside element
+          function markMatches(el, needle) {
+            const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+              acceptNode: n => (n.nodeValue && n.nodeValue.toLowerCase().includes(needle)) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
+            });
+            const hits = [];
+            while (walker.nextNode()) {
+              const textNode = walker.currentNode;
+              const val = textNode.nodeValue;
+              const idx = val.toLowerCase().indexOf(needle);
+              if (idx >= 0) {
+                const before = document.createTextNode(val.slice(0, idx));
+                const hit = document.createElement('mark'); hit.className = 'search-hit'; hit.textContent = val.slice(idx, idx + needle.length);
+                const after = document.createTextNode(val.slice(idx + needle.length));
+                const frag = document.createDocumentFragment();
+                frag.appendChild(before); frag.appendChild(hit); frag.appendChild(after);
+                textNode.parentNode.replaceChild(frag, textNode);
+                hits.push(hit);
+              }
+            }
+            return hits.length;
+          }
+
+          function searchNow() {
+            const pane = getActiveTabPane();
+            if (!pane) return;
+            const queryRaw = q.value.trim();
+            const query = queryRaw.toLowerCase();
+
+            // Reset: show everything & clear highlights
+            pane.querySelectorAll('.accordion-item').forEach(item => {
+              item.classList.remove('search-hide');
+              unmark(item);
+            });
+            pane.querySelectorAll('.card').forEach(card => card.classList.remove('search-hide'));
+
+            if (!query) {
+              count.textContent = 'Type to filter methods…';
+              return;
+            }
+
+            let visibleMethods = 0;
+
+            // For each class card, we’ll hide methods not matching; hide the whole card if no method matches.
+            pane.querySelectorAll('.card').forEach(card => {
+              let matchesInCard = 0;
+              // Consider title + body text inside each method item
+              card.querySelectorAll('.accordion-item').forEach(item => {
+                const text = item.innerText.toLowerCase();
+                if (text.includes(query)) {
+                  // highlight within the method item
+                  markMatches(item, query);
+                  item.classList.remove('search-hide');
+                  matchesInCard++;
+                  visibleMethods++;
+                } else {
+                  item.classList.add('search-hide');
+                }
+              });
+              if (matchesInCard === 0) {
+                card.classList.add('search-hide');
+              }
+            });
+
+            count.textContent = visibleMethods === 0
+              ? 'No matches in this tab.'
+              : `${visibleMethods} method${visibleMethods>1?'s':''} shown`;
+          }
+
+          const run = debounce(searchNow, 120);
+          q.addEventListener('input', run);
+          q.addEventListener('keydown', (e) => { if (e.key === 'Escape') { q.value=''; run(); }});
+          clr.addEventListener('click', () => { q.value=''; run(); });
+
+          // Re-run search when user switches tabs (keeps query applied per tab)
+          document.getElementById('pkgTabs')?.addEventListener('click', () => setTimeout(run, 50));
+        })();
+        </script>        
     </body>
 </html>
