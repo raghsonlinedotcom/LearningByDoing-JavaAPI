@@ -10,6 +10,7 @@
     pre { background: #f8f9fa; padding: 1rem; border-radius: 0.5rem; }
     code { color: #d63384; }
     .nav-link.active { font-weight: bold; }
+    .card-header { background-color: #f1f1f1; }
   </style>
 </head>
 <body>
@@ -24,124 +25,74 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item"><a class="nav-link" href="#intro">Introduction</a></li>
-        <li class="nav-item"><a class="nav-link" href="#modules">Modules</a></li>
-        <li class="nav-item"><a class="nav-link" href="#diagram">Flow</a></li>
-        <li class="nav-item"><a class="nav-link" href="#output">Output</a></li>
+        <li class="nav-item"><a class="nav-link" href="#why">Why</a></li>
+        <li class="nav-item"><a class="nav-link" href="#keywords">Keywords</a></li>
+        <li class="nav-item"><a class="nav-link" href="#compile">How to Run</a></li>
+        <li class="nav-item"><a class="nav-link" href="#usecases">Use Cases</a></li>
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- Jumbotron Intro -->
-<section id="intro" class="container">
+<!-- Introduction -->
+<section id="intro" class="container mt-5">
   <div class="p-5 mb-4 bg-light rounded-3">
     <div class="container-fluid py-3">
       <h1 class="display-5">Java Platform Module System (JPMS)</h1>
-      <p class="fs-5">This tutorial walks you through the structure, setup, and execution of a real-world modular Java application using JPMS, introduced in Java 9.</p>
+      <p class="fs-5">JPMS was introduced in Java 9 to provide strong encapsulation and reliable configuration of Java code.</p>
       <hr>
-      <p>Project: <strong>Library Management System</strong> — modularized into Core, DAO, Service, and UI layers.</p>
+      <p>This tutorial explains <strong>What</strong> modules are, <strong>Why</strong> they matter, <strong>How</strong> to use them, and <strong>When</strong> to apply them.</p>
     </div>
   </div>
 </section>
 
-<!-- Module Breakdown -->
-<section id="modules" class="container mb-5">
-  <h2 class="mb-4">Module Breakdown</h2>
-  <div class="accordion" id="moduleAccordion">
-
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="coreHeading">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#core" aria-expanded="true">
-          lib.core (Book Entity)
-        </button>
-      </h2>
-      <div id="core" class="accordion-collapse collapse show">
-        <div class="accordion-body">
-          <p>Defines the domain object <code>Book</code> and exports the package <code>com.lib.core</code>.</p>
-<pre><code>module lib.core {
-  exports com.lib.core;
-}</code></pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="daoHeading">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dao">
-          lib.dao (Repository Layer)
-        </button>
-      </h2>
-      <div id="dao" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <p>Access layer for books. Depends on <code>lib.core</code> and exports <code>com.lib.dao</code>.</p>
-<pre><code>module lib.dao {
-  requires lib.core;
-  exports com.lib.dao;
-}</code></pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="serviceHeading">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#service">
-          lib.service (Business Logic)
-        </button>
-      </h2>
-      <div id="service" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <p>Depends on both <code>lib.core</code> and <code>lib.dao</code> and encapsulates logic to fetch and print books.</p>
-<pre><code>module lib.service {
-  requires lib.core;
-  requires lib.dao;
-  exports com.lib.service;
-}</code></pre>
-        </div>
-      </div>
-    </div>
-
-    <div class="accordion-item">
-      <h2 class="accordion-header" id="uiHeading">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ui">
-          lib.ui (Main Entry)
-        </button>
-      </h2>
-      <div id="ui" class="accordion-collapse collapse">
-        <div class="accordion-body">
-          <p>Depends only on <code>lib.service</code> and serves as the application entry point.</p>
-<pre><code>module lib.ui {
-  requires lib.service;
-}</code></pre>
-        </div>
-      </div>
-    </div>
-
-  </div>
+<!-- Why -->
+<section id="why" class="container mb-5">
+  <h2>🎯 Why Use Modules?</h2>
+  <ul>
+    <li>✅ Enforce encapsulation (no more public everything!)</li>
+    <li>✅ Resolve dependency conflicts with explicit <code>requires</code></li>
+    <li>✅ Allow selective reflection via <code>opens</code></li>
+    <li>✅ Support plugin systems via <code>provides/uses</code></li>
+  </ul>
+  <p>JPMS solves <strong>classpath hell</strong> and enables large-scale Java application structuring.</p>
 </section>
 
-<!-- Module Diagram -->
-<section id="diagram" class="container mb-5">
-  <h2 class="mb-4">📊 Module Flow (ASCII)</h2>
-  <pre><code>
-[java.base]
-     ↓
-[lib.core]
-     ↓
-[lib.dao]
-     ↓
-[lib.service]
-     ↓
-[lib.ui]</code></pre>
+<!-- JPMS Keywords -->
+<section id="keywords" class="container mb-5">
+  <h2>🪄 JPMS Keywords Explained</h2>
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr><th>Keyword</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>module</code></td><td>Declares a named module</td></tr>
+      <tr><td><code>requires</code></td><td>Imports another module</td></tr>
+      <tr><td><code>exports</code></td><td>Makes a package accessible to other modules</td></tr>
+      <tr><td><code>opens</code></td><td>Allows reflection on package (needed for frameworks)</td></tr>
+      <tr><td><code>provides ... with</code></td><td>Declares a service implementation</td></tr>
+      <tr><td><code>uses</code></td><td>Declares a service consumer</td></tr>
+    </tbody>
+  </table>
 </section>
 
-<!-- Output -->
-<section id="output" class="container mb-5">
-  <h2 class="mb-4">✅ Sample Output</h2>
-  <div class="alert alert-success" role="alert">
-    📚 Welcome to the Modular Library!<br>
-    Clean Code by Robert C. Martin<br>
-    Effective Java by Joshua Bloch
-  </div>
+<!-- How to Compile/Run -->
+<section id="compile" class="container mb-5">
+  <h2>🛠️ How to Compile & Run</h2>
+  <pre><code>javac --module-source-path . -d out $(find . -name "*.java")
+java --module-path out -m lib.ui/com.lib.ui.LibraryApp</code></pre>
+  <p>Ensure all modules are defined with a <code>module-info.java</code> file at the root.</p>
+</section>
+
+<!-- Use Cases -->
+<section id="usecases" class="container mb-5">
+  <h2>📚 Real-World Use Cases</h2>
+  <ul>
+    <li>📦 Enterprise applications with 10+ modules</li>
+    <li>🔌 Plugin systems with <code>ServiceLoader</code></li>
+    <li>🧪 SDKs and APIs that want to expose only a small public surface</li>
+    <li>🐳 Modular Docker builds and deployment (per-feature images)</li>
+  </ul>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
