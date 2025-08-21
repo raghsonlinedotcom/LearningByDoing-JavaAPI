@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Java Modules (JPMS) - Full Tutorial</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Java Modules & JPMS Tutorial</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       padding-top: 4rem;
@@ -13,141 +13,204 @@
       position: fixed;
       top: 4rem;
       left: 0;
-      height: 100%;
-      width: 250px;
+      bottom: 0;
+      width: 280px;
       padding: 1rem;
       background-color: #f8f9fa;
       overflow-y: auto;
-      border-right: 1px solid #ddd;
     }
-    .content {
-      margin-left: 270px;
-      padding: 2rem;
-    }
-    pre {
-      background-color: #f1f1f1;
-      padding: 1rem;
+    main {
+      margin-left: 300px;
     }
   </style>
 </head>
 <body>
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">JPMS Tutorial</a>
+      <div class="ms-auto">
+        <select id="versionSwitcher" class="form-select">
+          <option>v1.0 - Fundamentals</option>
+          <option>v2.0 - Expanded</option>
+        </select>
+      </div>
     </div>
   </nav>
 
+  <!-- Sidebar -->
   <div class="sidebar">
-    <h6>📚 Sections</h6>
+    <h5>Navigation</h5>
     <ul class="nav flex-column">
-      <li><a href="#intro" class="nav-link">Introduction</a></li>
-      <li><a href="#why" class="nav-link">Why JPMS?</a></li>
-      <li><a href="#how" class="nav-link">How to Create Modules</a></li>
-      <li><a href="#realworld" class="nav-link">Real-World Examples</a></li>
-      <li><a href="#diagrams" class="nav-link">Diagrams</a></li>
-      <li><a href="#cli" class="nav-link">CLI & Compilation</a></li>
-      <li><a href="#pitfalls" class="nav-link">Common Pitfalls</a></li>
-      <li><a href="#summary" class="nav-link">Summary</a></li>
+      <li class="nav-item"><a href="#intro" class="nav-link">1. Intro</a></li>
+      <li class="nav-item"><a href="#why" class="nav-link">2. Why JPMS</a></li>
+      <li class="nav-item"><a href="#structure" class="nav-link">3. Structure</a></li>
+      <li class="nav-item"><a href="#cli" class="nav-link">4. CLI Example</a></li>
+      <li class="nav-item"><a href="#ascii" class="nav-link">5. ASCII Diagram</a></li>
+      <li class="nav-item"><a href="#realtime" class="nav-link">6. Real Use Cases</a></li>
+      <li class="nav-item"><a href="#pitfalls" class="nav-link">7. Pitfalls</a></li>
     </ul>
+    <input type="text" id="searchBox" class="form-control mt-3" placeholder="Search...">
   </div>
 
-  <div class="content">
-    <h1 id="intro">📘 Introduction to JPMS</h1>
-    <p>JPMS (Java Platform Module System) was introduced in Java 9 to improve modularity, encapsulation, and maintainability of Java applications. It allows splitting large monolithic codebases into manageable <strong>modules</strong>.</p>
+  <!-- Main Content -->
+  <main class="container">
+    <div class="accordion" id="jpmsAccordion">
 
-    <h2 id="why">❓ Why Use Modules?</h2>
-    <ul>
-      <li>Encapsulation of internal APIs</li>
-      <li>Faster startup and better performance</li>
-      <li>Explicit dependencies using <code>requires</code></li>
-      <li>Clear separation of concerns</li>
-      <li>Enables strong encapsulation via <code>exports</code></li>
-    </ul>
-
-    <h2 id="how">⚙️ How to Create Modules</h2>
-    <p>Each module requires a <code>module-info.java</code> descriptor:</p>
-    <pre><code>module com.invoice.service {
-  requires com.invoice.model;
-  exports com.invoice.service;
-}</code></pre>
-    <p><strong>Key keywords:</strong> <code>requires</code>, <code>exports</code>, <code>opens</code>, <code>uses</code>, <code>provides ... with</code></p>
-
-    <h2 id="realworld">🏢 Real-World Examples (Accordion)</h2>
-    <div class="accordion" id="examplesAccordion">
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
-            📦 Example 1: Invoice Management System
+      <div class="accordion-item" id="intro">
+        <h2 class="accordion-header" id="headingIntro">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIntro" aria-expanded="true">
+            1. What is JPMS?
           </button>
         </h2>
-        <div id="collapseOne" class="accordion-collapse collapse show">
+        <div id="collapseIntro" class="accordion-collapse collapse show">
+          <div class="accordion-body">
+            JPMS stands for <strong>Java Platform Module System</strong> — introduced in Java 9 to bring modularity.
+            A module is a self-contained collection of code with explicit dependencies and exposed packages.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" id="why">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWhy">
+            2. Why use JPMS?
+          </button>
+        </h2>
+        <div id="collapseWhy" class="accordion-collapse collapse">
           <div class="accordion-body">
             <ul>
-              <li><code>com.invoice.model</code> — POJOs, Domain Objects</li>
-              <li><code>com.invoice.service</code> — Business logic</li>
-              <li><code>com.invoice.api</code> — REST layer, public API</li>
-              <li><code>com.invoice.db</code> — Persistence layer</li>
+              <li>💊 Avoid Classpath Hell</li>
+              <li>🔐 Better encapsulation & security</li>
+              <li>🚀 Better performance & startup time</li>
+              <li>🔍 Clear dependencies via <code>requires</code></li>
             </ul>
-            <pre><code>module com.invoice.db {
-  requires java.sql;
-  exports com.invoice.db;
-}</code></pre>
           </div>
         </div>
       </div>
 
-      <div class="accordion-item">
-        <h2 class="accordion-header" id="headingTwo">
-          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-            📦 Example 2: HR Management System
+      <div class="accordion-item" id="structure">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStructure">
+            3. Structure of a Module
           </button>
         </h2>
-        <div id="collapseTwo" class="accordion-collapse collapse">
+        <div id="collapseStructure" class="accordion-collapse collapse">
           <div class="accordion-body">
-            Modules like <code>com.hr.core</code>, <code>com.hr.auth</code>, <code>com.hr.payroll</code> help encapsulate payroll and auth independently.
+            <pre><code>// module-info.java
+module com.example.hello {
+  exports com.example.hello;
+}</code></pre>
+            <p>This tells the JVM what to export and what other modules may access.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" id="cli">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCli">
+            4. Compile & Run from CLI
+          </button>
+        </h2>
+        <div id="collapseCli" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <pre><code># Compile Hello module
+javac -d out/hello com.hello/module-info.java com.hello/com/hello/Hello.java
+
+# Compile Greetings module
+javac --module-path out -d out/greetings \
+      com.greetings/module-info.java \
+      com.greetings/com/greetings/Main.java
+
+# Run the main
+java --module-path out -m com.greetings/com.greetings.Main</code></pre>
+            <p>✅ Output: <code>Hello from JPMS!</code></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" id="ascii">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAscii">
+            5. ASCII Diagram
+          </button>
+        </h2>
+        <div id="collapseAscii" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <pre><code>       +------------------+
+       |  com.greetings   |
+       |------------------|
+       | requires com.hello
+       +------------------+
+                |
+                v
+       +----------------+
+       |   com.hello    |
+       |----------------|
+       | exports Hello  |
+       +----------------+
+</code></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" id="realtime">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRealtime">
+            6. Real-time Use Cases
+          </button>
+        </h2>
+        <div id="collapseRealtime" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <ul>
+              <li>🔐 Securing internal APIs in libraries</li>
+              <li>📦 Creating isolated plugins/modules</li>
+              <li>🧩 Building maintainable large codebases</li>
+              <li>💡 Improved reflection & control</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item" id="pitfalls">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePitfalls">
+            7. Common Pitfalls
+          </button>
+        </h2>
+        <div id="collapsePitfalls" class="accordion-collapse collapse">
+          <div class="accordion-body">
+            <ul>
+              <li>🔍 Forgetting <code>exports</code> → Access denied</li>
+              <li>🔗 Missing <code>requires</code> → Compile failure</li>
+              <li>⚠️ Reflection errors → Use <code>opens</code> in <code>module-info.java</code></li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
+  </main>
 
-    <h2 id="diagrams">📊 Diagrams (PlantUML)</h2>
-    <pre>@startuml
-skinparam componentStyle rectangle
-
-component [API Module] as A
-component [Model Module] as M
-component [Service Module] as S
-component [DB Module] as D
-
-A --> S
-S --> M
-S --> D
-@enduml</pre>
-
-    <h2 id="cli">💻 CLI & Compilation</h2>
-    <pre><code>javac -d out --module-source-path src $(find src -name "*.java")
-java --module-path out -m com.invoice.api/com.invoice.api.Main</code></pre>
-
-    <h2 id="pitfalls">⚠️ Common Pitfalls</h2>
-    <ul>
-      <li>Forgetting <code>exports</code> leads to IllegalAccessError</li>
-      <li>Mixing automatic modules (from JARs) and explicit modules can confuse the resolver</li>
-      <li>Third-party libs without <code>module-info</code> may need <code>--add-exports</code> or unnamed module hacks</li>
-    </ul>
-
-    <h2 id="summary">✅ Summary</h2>
-    <ul>
-      <li>Modules = clear contracts between packages</li>
-      <li>Boosts maintainability, readability, and security</li>
-      <li>Start small — modularize new features first</li>
-    </ul>
-
-    <div class="alert alert-success mt-4" role="alert">
-      🎉 You're now ready to build your first Java Modular App with confidence!
+  <!-- Toast -->
+  <div class="position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast" role="alert">
+      <div class="toast-header">
+        <strong class="me-auto">JPMS UI</strong>
+        <small>Now</small>
+        <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+      </div>
+      <div class="toast-body">Search not implemented yet. Coming soon!</div>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('searchBox').addEventListener('input', function () {
+      const toast = new bootstrap.Toast(document.getElementById('liveToast'));
+      toast.show();
+    });
+  </script>
 </body>
 </html>
 
